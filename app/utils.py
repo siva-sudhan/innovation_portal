@@ -6,6 +6,8 @@ import io
 from collections import Counter
 import uuid
 from flask import session
+from app.models import Idea
+from sqlalchemy import or_
 
 # 🔑 Determine the current system username
 def get_current_username() -> str:
@@ -29,7 +31,6 @@ def get_voter_id() -> str:
     """Return an identifier for the current voter."""
     if 'username' in session:
         return session['username']
-
     return get_device_id()
 
 # 🔖 Generate keyword tags from title + description
@@ -42,6 +43,25 @@ def generate_tags(text, top_n=5):
     filtered = [w for w in words if w not in stopwords and len(w) > 2]
     most_common = Counter(filtered).most_common(top_n)
     return [word for word, _ in most_common]
+
+# 🔍 Find similar ideas in the portal by matching tags
+def find_similar_ideas(new_idea_tags, exclude_id=None, max_results=5):
+    if not new_idea_tags:
+        return []
+
+    filters = [Idea.tags.like(f"%{tag}%") for tag in new_idea_tags]
+    query = Idea.query.filter(or_(*filters))
+
+    if exclude_id:
+        query = query.filter(Idea.id != exclude_id)
+
+    return query.order_by(Idea.timestamp.desc()).limit(max_results).all()
+
+# 🌐 Generate Google Patents search URL
+def generate_patent_search_url(title, tags):
+    query_terms = title + " " + " ".join(tags)
+    query_string = re.sub(r'\s+', '+', query_terms.strip())
+    return f"https://patents.google.com/?q={query_string}"
 
 # 📦 Export list of ideas to Excel
 def export_ideas_to_excel(ideas):

@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <title>{% block title %}Innovation Hub{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
   <header>
-    <h1>Innovation Hub</h1>
+    <h1>🚀 Innovation Hub</h1>
     <nav>
       <a href="{{ url_for('views.submit_idea') }}">Submit Idea</a> |
       <a href="{{ url_for('views.dashboard') }}">Dashboard</a>
@@ -21,16 +22,25 @@
     <hr>
   </header>
 
-  <main>
+  <main class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        {% for category, message in messages %}
-          <div class="flash {{ category }}">{{ message }}</div>
-        {% endfor %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
       {% endif %}
     {% endwith %}
-    
+
     {% block content %}{% endblock %}
   </main>
+
+  <footer>
+    <hr>
+    <p style="text-align: center; font-size: 0.9em;">
+      💡 Made for team collaboration and innovation at Caterpillar Inc.
+    </p>
+  </footer>
 </body>
 </html>

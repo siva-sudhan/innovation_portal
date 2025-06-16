@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Idea Submitted | Innovation Hub{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>🎉 Thank you for your idea!</h2>
+  <p>Your idea "<strong>{{ idea.title }}</strong>" was submitted successfully.</p>
+
+  <div class="mt-4">
+    <h4>🔍 Similar Ideas in Innovation Hub</h4>
+    {% if similar_ideas %}
+      <ul>
+        {% for similar in similar_ideas %}
+          <li>
+            <a href="{{ url_for('views.idea_detail', idea_id=similar.id) }}">
+              {{ similar.title }}
+            </a> – {{ similar.tags }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No similar ideas found. You’re pioneering new ground! 🚀</p>
+    {% endif %}
+  </div>
+
+  <div class="mt-4">
+    <h4>🧠 Related Patents (External)</h4>
+    <p>
+      Based on your submission, we found potential existing patents you might be interested in.
+      <br>
+      <a href="{{ patent_url }}" target="_blank" rel="noopener">
+        🔗 View similar patents on Google Patents
+      </a>
+    </p>
+  </div>
+
+  <div class="mt-4">
+    <a href="{{ url_for('views.dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+  </div>
+</div>
+{% endblock %}

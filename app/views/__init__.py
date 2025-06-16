@@ -2,7 +2,14 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from datetime import datetime
 from app.forms import IdeaForm, VoteForm, LoginForm
 from app.models import db, Idea, Vote
-from app.utils import generate_tags, export_ideas_to_excel, get_current_username, get_voter_id
+from app.utils import (
+    generate_tags,
+    export_ideas_to_excel,
+    get_current_username,
+    get_voter_id,
+    find_similar_ideas,
+    generate_patent_search_url
+)
 from app.auth import is_admin
 from io import BytesIO
 
@@ -10,7 +17,6 @@ views_bp = Blueprint('views', __name__)
 
 @views_bp.route('/settings', methods=['GET', 'POST'])
 def settings():
-    """Settings page shown after login allowing username updates."""
     form = LoginForm()
     if form.validate_on_submit():
         user = form.username.data.strip()
@@ -27,7 +33,8 @@ def submit_idea():
         title = form.title.data
         description = form.description.data
         is_anonymous = form.is_anonymous.data
-        tags = ','.join(generate_tags(f"{title} {description}"))
+        tags_list = generate_tags(f"{title} {description}")
+        tags = ','.join(tags_list)
 
         idea = Idea(
             title=title,
@@ -39,8 +46,18 @@ def submit_idea():
         )
         db.session.add(idea)
         db.session.commit()
+
+        # Fetch similar ideas and Google Patent suggestions
+        similar_ideas = find_similar_ideas(tags_list, exclude_id=idea.id)
+        patent_url = generate_patent_search_url(title, tags_list)
+
         flash('Idea submitted successfully!', 'success')
-        return redirect(url_for('views.dashboard'))
+        return render_template(
+            'submit_success.html',
+            idea=idea,
+            similar_ideas=similar_ideas,
+            patent_url=patent_url
+        )
 
     return render_template('submit.html', form=form)
 
@@ -90,7 +107,6 @@ def edit_idea(idea_id):
 
     return render_template("edit_idea.html", form=form, idea=idea)
 
-# --- Delete Idea ---
 @views_bp.route('/idea/<int:idea_id>/delete')
 def delete_idea(idea_id):
     if session.get('role') != 'admin':
@@ -103,8 +119,6 @@ def delete_idea(idea_id):
     flash("Idea deleted.", "success")
     return redirect(url_for('views.dashboard'))
 
-
-# --- Vote on Idea ---
 @views_bp.route('/vote/<int:idea_id>', methods=['POST'])
 def vote(idea_id):
     form = VoteForm()
