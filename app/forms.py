@@ -7,3 +7,7 @@ class IdeaForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired(), Length(min=10)])
     is_anonymous = BooleanField('Submit Anonymously')
     submit = SubmitField('Submit Idea')
+
+
+class VoteForm(FlaskForm):
+    submit = SubmitField('\N{THUMBS UP SIGN} Vote')
