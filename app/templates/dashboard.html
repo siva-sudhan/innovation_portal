@@ -46,14 +46,7 @@
 
                   {{ vote_form.hidden_tag() }}
                   {{ vote_form.submit() }}
-
-
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                  {{ csrf_token() }}
-
-                  <button type="submit">👍 Vote</button>
-
+                  
                 </form>
               {% endif %}
             </td>
