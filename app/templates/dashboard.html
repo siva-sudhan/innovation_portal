@@ -24,6 +24,7 @@
           <th>Tags</th>
           <th>Submitted</th>
           <th>Votes</th>
+          <th>Vote</th>
           <th>Details</th>
           {% if session.role == 'admin' %}
             <th>Actions</th>
@@ -37,6 +38,16 @@
             <td>{{ idea.tags }}</td>
             <td>{{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
             <td>{{ idea.votes }}</td>
+            <td>
+              {% if idea.id in voted_ideas %}
+                You voted
+              {% else %}
+                <form method="POST" action="{{ url_for('views.vote', idea_id=idea.id) }}">
+                  {{ csrf_token() }}
+                  <button type="submit">👍 Vote</button>
+                </form>
+              {% endif %}
+            </td>
             <td><a href="{{ url_for('views.idea_detail', idea_id=idea.id) }}">View</a></td>
 
             {% if session.role == 'admin' %}
