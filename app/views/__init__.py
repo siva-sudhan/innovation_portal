@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from datetime import datetime
 from app.forms import IdeaForm, VoteForm
 from app.models import db, Idea, Vote
-from app.utils import generate_tags, export_ideas_to_excel, get_current_username, get_voter_id
+from app.utils import generate_tags, export_ideas_to_excel, get_voter_id, get_device_id
 from io import BytesIO
 
 views_bp = Blueprint('views', __name__)
@@ -20,9 +20,9 @@ def submit_idea():
             title=title,
             description=description,
             tags=tags,
-            submitter=get_current_username(),
+            submitter=get_device_id(),
             is_anonymous=is_anonymous,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.utcnow(),
         )
         db.session.add(idea)
         db.session.commit()

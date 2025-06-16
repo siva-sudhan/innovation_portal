@@ -15,17 +15,19 @@ def get_current_username() -> str:
     except OSError:
         return getpass.getuser()
 
-# 👤 Determine a stable identifier for voting
-def get_voter_id() -> str:
-    """Return an identifier for the current voter."""
-    if 'username' in session:
-        return session['username']
-
+# 👤 Determine a stable identifier tied to the current device
+def get_device_id() -> str:
+    """Return an identifier for the current device."""
     device_id = session.get('device_id')
     if not device_id:
         device_id = str(uuid.getnode())
         session['device_id'] = device_id
     return device_id
+
+# 👤 Identifier used for voting or submissions
+def get_voter_id() -> str:
+    """Return the device-based identifier for the current voter."""
+    return get_device_id()
 
 # 🔖 Generate keyword tags from title + description
 def generate_tags(text, top_n=5):
@@ -44,7 +46,7 @@ def export_ideas_to_excel(ideas):
     workbook = xlsxwriter.Workbook(output, {'in_memory': True})
     sheet = workbook.add_worksheet('Ideas')
 
-    headers = ['ID', 'Title', 'Description', 'Tags', 'Submitter', 'Anonymous', 'Timestamp', 'Votes']
+    headers = ['ID', 'Title', 'Description', 'Tags', 'Device ID', 'Anonymous', 'Timestamp', 'Votes']
     for col, header in enumerate(headers):
         sheet.write(0, col, header)
 
