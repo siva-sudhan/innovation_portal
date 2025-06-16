@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 
-{% block title %}Innovation Hub Login{% endblock %}
+{% block title %}Innovation Hub – Login{% endblock %}
 
 {% block content %}
-  <h2>Login</h2>
-  <form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.username.label }}<br>
-      {{ form.username(size=40) }}
-      {% if form.username.errors %}
-        <div class="error">{{ form.username.errors[0] }}</div>
-      {% endif %}
-    </div>
-    <div class="form-group">
-      {{ form.submit(class="btn") }}
-    </div>
-  </form>
+  <h2 class="page-heading">🔐 Login to Innovation Hub</h2>
+
+  <div class="card fade-in">
+    <form method="POST" class="login-form">
+      {{ form.hidden_tag() }}
+
+      <div class="form-group">
+        <label>{{ form.username.label }}</label><br>
+        {{ form.username(size=40, class="input-text") }}
+        {% if form.username.errors %}
+          <div class="error">{{ form.username.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.submit(class="btn btn-primary") }}
+      </div>
+    </form>
+  </div>
 {% endblock %}

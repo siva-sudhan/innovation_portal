@@ -89,7 +89,18 @@ def idea_detail(idea_id):
     voter_id = get_voter_id()
     voted = Vote.query.filter_by(idea_id=idea.id, voter_id=voter_id).first() is not None
     vote_form = VoteForm()
-    return render_template('idea_detail.html', idea=idea, voted=voted, vote_form=vote_form)
+
+    # ✅ Find similar ideas (by tags)
+    tags_list = [tag.strip() for tag in idea.tags.split(',')] if idea.tags else []
+    similar_ideas = find_similar_ideas(tags_list, exclude_id=idea.id)
+
+    return render_template(
+        'idea_detail.html',
+        idea=idea,
+        voted=voted,
+        vote_form=vote_form,
+        similar_ideas=similar_ideas
+    )
 
 @views_bp.route('/idea/<int:idea_id>/edit', methods=['GET', 'POST'])
 def edit_idea(idea_id):

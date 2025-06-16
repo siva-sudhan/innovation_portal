@@ -86,3 +86,8 @@ def export_ideas_to_excel(ideas):
     workbook.close()
     output.seek(0)
     return output
+
+def generate_teams_link(username: str) -> str:
+    base = "https://teams.microsoft.com/l/chat/0/0"
+    message = f"Hi! I found your idea on the Innovation Hub and would love to collaborate."
+    return f"{base}?users={username}@caterpillar.com&message={message}"

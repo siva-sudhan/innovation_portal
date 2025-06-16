@@ -69,6 +69,356 @@ td {
 th {
   background-color: #eee;
 }
+.idea-form-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.4em;
+  color: #222;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #FFCD00;
+  outline: none;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hint {
+  font-size: 0.85em;
+  color: #777;
+}
+
+.submit-button {
+  background-color: #FFCD00;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #e6b800;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Layout & Theme */
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background-color: #f8f8f8;
+  color: #1a1a1a;
+}
+
+.header-bar {
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 15px 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.nav-links a {
+  color: #FFCD00;
+  text-decoration: none;
+  margin-left: 15px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+.container {
+  padding: 20px 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.footer {
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
+  color: #555;
+  border-top: 1px solid #ddd;
+  background-color: #f0f0f0;
+  margin-top: 40px;
+}
+
+/* Animations */
+.fade-slide {
+  animation: fadeSlideIn 0.4s ease-in-out both;
+}
+
+.dashboard-header {
+  margin-bottom: 20px;
+}
+
+.welcome {
+  margin-top: 10px;
+  font-size: 1.1em;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.8em;
+  border-radius: 12px;
+  margin-top: 5px;
+}
+.badge.admin { background-color: #FFCD00; color: #000; }
+.badge.user { background-color: #ddd; color: #333; }
+
+.idea-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 20px;
+}
+
+.idea-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  padding: 20px;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.idea-card:hover {
+  transform: translateY(-3px);
+}
+
+.tags {
+  margin: 8px 0;
+}
+.tag {
+  background-color: #FFCD00;
+  color: #111;
+  font-size: 0.75em;
+  padding: 2px 6px;
+  margin-right: 5px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.vote-section {
+  margin-top: 10px;
+}
+
+.vote-btn {
+  background-color: #FFCD00;
+  border: none;
+  color: #000;
+  padding: 6px 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.vote-btn:hover {
+  background-color: #e6b800;
+}
+
+.voted-msg {
+  font-size: 0.9em;
+  color: #28a745;
+}
+
+.admin-actions {
+  margin-top: 10px;
+  font-size: 0.85em;
+}
+
+.export-form {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.export-btn {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.export-btn:hover {
+  background-color: #555;
+}
+
+.similar-ideas {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #fefefe;
+  border-left: 4px solid #FFCD00;
+  border-radius: 6px;
+}
+
+.similar-ideas ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.similar-ideas li {
+  margin-bottom: 8px;
+}
+
+.similar-ideas a {
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: underline;
+}
+.similar-ideas a:hover {
+  color: #FFCD00;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-heading {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.06);
+}
+
+.input-text,
+.input-textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.checkbox-group {
+  margin: 10px 0;
+}
+
+.btn-primary {
+  background-color: #ffcc00;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  color: #000;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #e6b800;
+}
+
+.back-link {
+  margin-top: 20px;
+  font-size: 0.95em;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #444;
+  background: #f9f9f9;
+  padding: 10px;
+  border-left: 4px solid #ffcc00;
+  border-radius: 5px;
+}
+
+.btn-secondary {
+  background-color: #ddd;
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.btn-secondary:hover {
+  background-color: #bbb;
+}
+
+a.btn:hover,
+.btn:hover {
+  text-decoration: none;
+  opacity: 0.95;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 .flash {
   padding: 10px;

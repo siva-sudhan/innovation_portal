@@ -3,73 +3,57 @@
 {% block title %}Innovation Hub – Dashboard{% endblock %}
 
 {% block content %}
-  <h2>Submitted Ideas</h2>
-  <p class="idea-count">🚀 {{ unique_user_count }} unique users have submitted ideas so far</p>
+  <div class="dashboard-header">
+    <h2>🗂️ Submitted Ideas</h2>
+    <p class="idea-count">🚀 {{ unique_user_count }} unique users have submitted ideas so far</p>
 
-  {% if session.username %}
-    <h2>Welcome {{ session.username }}</h2>
-
-    {% if session.role == 'admin' %}
-      <p><strong>Role:</strong> Admin</p>
-    {% else %}
-      <p><strong>Role:</strong> User</p>
+    {% if session.username %}
+      <p class="welcome">Welcome <strong>{{ session.username }}</strong></p>
+      <span class="badge {{ session.role }}">
+        {{ session.role|capitalize }}
+      </span>
     {% endif %}
-  {% endif %}
+  </div>
 
   {% if ideas %}
-    <h3>Total Ideas: {{ ideas|length }}</h3>
+    <div class="idea-grid">
+      {% for idea in ideas %}
+        <div class="idea-card animate-fade-in">
+          <h3>{{ idea.title }}</h3>
+          <p class="tags">
+            {% for tag in idea.tags.split(',') %}
+              <span class="tag">{{ tag.strip() }}</span>
+            {% endfor %}
+          </p>
+          <p><strong>Submitted:</strong> {{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+          <p><strong>By:</strong> {{ 'Anonymous' if idea.is_anonymous else idea.submitter }}</p>
+          <p><strong>Votes:</strong> {{ idea.votes }}</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Tags</th>
-          <th>Submitted</th>
-          <th>Submitted By</th>
-          <th>Votes</th>
-          <th>Vote</th>
-          <th>Details</th>
-          {% if session.role == 'admin' %}
-            <th>Actions</th>
-          {% endif %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for idea in ideas %}
-          <tr>
-            <td>{{ idea.title }}</td>
-            <td>{{ idea.tags }}</td>
-            <td>{{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
-            <td>{{ 'Anonymous' if idea.is_anonymous else idea.submitter }}</td>
-            <td>{{ idea.votes }}</td>
-            <td>
-              {% if idea.id in voted_ideas %}
-                You voted
-              {% else %}
-                <form method="POST" action="{{ url_for('views.vote', idea_id=idea.id) }}">
-
-                  {{ vote_form.hidden_tag() }}
-                  {{ vote_form.submit() }}
-                  
-                </form>
-              {% endif %}
-            </td>
-            <td><a href="{{ url_for('views.idea_detail', idea_id=idea.id) }}">View</a></td>
-
-            {% if session.role == 'admin' %}
-              <td>
-                <a href="{{ url_for('views.edit_idea', idea_id=idea.id) }}">✏️ Edit</a> |
-                <a href="{{ url_for('views.delete_idea', idea_id=idea.id) }}" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
-              </td>
+          <div class="vote-section">
+            {% if idea.id in voted_ideas %}
+              <p class="voted-msg">✅ You voted</p>
+            {% else %}
+              <form method="POST" action="{{ url_for('views.vote', idea_id=idea.id) }}">
+                {{ vote_form.hidden_tag() }}
+                {{ vote_form.submit(class="vote-btn") }}
+              </form>
             {% endif %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+          </div>
 
-    <br>
-    <form method="GET" action="{{ url_for('views.export_ideas') }}">
-      <button type="submit">📤 Export All Ideas to Excel</button>
+          <p><a href="{{ url_for('views.idea_detail', idea_id=idea.id) }}">🔍 View Details</a></p>
+
+          {% if session.role == 'admin' %}
+            <div class="admin-actions">
+              <a href="{{ url_for('views.edit_idea', idea_id=idea.id) }}">✏️ Edit</a> |
+              <a href="{{ url_for('views.delete_idea', idea_id=idea.id) }}" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <form method="GET" action="{{ url_for('views.export_ideas') }}" class="export-form">
+      <button type="submit" class="export-btn">📤 Export All Ideas to Excel</button>
     </form>
   {% else %}
     <p>No ideas submitted yet.</p>

@@ -24,5 +24,26 @@
   {% endif %}
 
   <br>
+  {% if similar_ideas %}
+  <div class="similar-ideas">
+    <h3>💡 Similar Ideas</h3>
+    <ul>
+      {% for sim in similar_ideas %}
+        <li>
+          <a href="{{ url_for('views.idea_detail', idea_id=sim.id) }}">
+            {{ sim.title }}
+          </a> – {{ sim.tags }}
+        </li>
+        <li>
+        <a href="{{ url_for('views.idea_detail', idea_id=sim.id) }}">{{ sim.title }}</a>
+        – {{ sim.tags }}
+        {% if not sim.is_anonymous and sim.submitter %}
+            <a href="{{ generate_teams_link(sim.submitter) }}" target="_blank" class="connect-btn">💬 Connect</a>
+        {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
   <a href="{{ url_for('views.dashboard') }}">← Back to Dashboard</a>
 {% endblock %}
