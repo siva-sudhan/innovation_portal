@@ -63,12 +63,10 @@
       </tbody>
     </table>
 
-    {% if session.role == 'admin' %}
-      <br>
-      <form method="GET" action="{{ url_for('views.export_ideas') }}">
-        <button type="submit">📤 Export All Ideas to Excel</button>
-      </form>
-    {% endif %}
+    <br>
+    <form method="GET" action="{{ url_for('views.export_ideas') }}">
+      <button type="submit">📤 Export All Ideas to Excel</button>
+    </form>
   {% else %}
     <p>No ideas submitted yet.</p>
   {% endif %}
