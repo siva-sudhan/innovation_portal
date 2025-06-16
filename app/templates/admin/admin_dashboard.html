@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard – Innovation Hub{% endblock %}
+
+{% block content %}
+  <h2 class="page-heading">🔐 Admin Panel</h2>
+
+  <div class="card admin-panel fade-in">
+    <h3>User Submission Stats</h3>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Total Submissions</th>
+          <th>Ideas</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user, stats in user_stats.items() %}
+          <tr>
+            <td>{{ user }}</td>
+            <td>{{ stats.count }}</td>
+            <td>
+              <ul>
+                {% for idea in stats.ideas %}
+                  <li>{{ idea.title }} ({{ idea.timestamp.strftime('%Y-%m-%d') }})</li>
+                {% endfor %}
+              </ul>
+            </td>
+            <td>
+              <form action="{{ url_for('admin.restrict_user', username=user) }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="restrict-btn">Restrict</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="admin-actions">
+      <a href="{{ url_for('admin.export_all_data') }}" class="btn btn-secondary">📦 Export Raw DB</a>
+    </div>
+  </div>
+
+  <div class="card live-stats fade-in">
+    <h3>📊 Live User Stats</h3>
+    <ul class="stats-list">
+      <li>Online Users: <strong>{{ live_stats.online_users }}</strong></li>
+      <li>Total Visits: <strong>{{ live_stats.total_visits }}</strong></li>
+      <li>Ideas Today: <strong>{{ live_stats.today_ideas }}</strong></li>
+    </ul>
+  </div>
+{% endblock %}

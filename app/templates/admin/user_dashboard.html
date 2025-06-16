@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin – User Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="page-heading">👤 User Submission Dashboard</h2>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Total Submissions</th>
+      <th>Ideas</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.username }}</td>
+      <td>{{ user.total_ideas }}</td>
+      <td>
+        <ul>
+          {% for idea in user.ideas %}
+          <li><a href="{{ url_for('views.idea_detail', idea_id=idea.id) }}">{{ idea.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </td>
+      <td>
+        {% if user.restricted %}
+        ❌ Restricted
+        {% else %}
+        ✅ Active
+        {% endif %}
+      </td>
+      <td>
+        <form method="POST" action="{{ url_for('admin.toggle_restriction', username=user.username) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          {% if user.restricted %}
+          <button type="submit" class="btn btn-activate">Unrestrict</button>
+          {% else %}
+          <button type="submit" class="btn btn-restrict">Restrict</button>
+          {% endif %}
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="export-section">
+  <form method="GET" action="{{ url_for('admin.export_all_data') }}">
+    <button type="submit" class="btn btn-export">📦 Export Raw Database</button>
+  </form>
+</div>
+
+{% endblock %}

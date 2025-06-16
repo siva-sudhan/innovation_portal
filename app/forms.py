@@ -5,8 +5,8 @@ from wtforms.validators import DataRequired, Length, Optional
 class IdeaForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=5, max=150)])
     description = TextAreaField('Description', validators=[DataRequired(), Length(min=10)])
-    teammates = StringField('Teammates (comma-separated)', validators=[Optional(), Length(max=250)])
-    intent = SelectField('Your Role in this Idea', choices=[
+    teammates = StringField('Teammates', validators=[Optional(), Length(max=250)])
+    intent = SelectField('Your Role :', choices=[
         ('owner', 'I want to own and implement this idea'),
         ('mentor', 'I want to mentor others on this idea'),
         ('visionary', 'I just believe this idea should exist')

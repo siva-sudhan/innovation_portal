@@ -6,7 +6,6 @@ import io
 from collections import Counter
 import uuid
 from flask import session
-from app.models import Idea
 from sqlalchemy import or_
 from urllib.parse import quote_plus
 import re
@@ -73,6 +72,7 @@ def generate_tags(text, top_n=5):
 
 # 🔍 Find similar ideas in the portal by matching tags
 def find_similar_ideas(new_idea_tags, exclude_id=None, max_results=5):
+    from app.models import Idea
     if not new_idea_tags:
         return []
 
