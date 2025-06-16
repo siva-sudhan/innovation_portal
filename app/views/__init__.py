@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, session
+from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 from app.forms import IdeaForm, VoteForm, LoginForm
 from app.models import db, Idea, Vote
@@ -71,7 +72,7 @@ def submit_idea():
 @views_bp.route('/dashboard')
 def dashboard():
     ideas = Idea.query.order_by(Idea.timestamp.desc()).all()
-    unique_user_count = db.session.query(Idea.submitter).filter(Idea.submitter != None).distinct().count()
+    unique_user_count = db.session.query(Idea.submitter).filter(Idea.submitter.isnot(None)).distinct().count()
 
     voter_id = get_voter_id()
     voted = Vote.query.filter_by(voter_id=voter_id).all()
@@ -160,7 +161,14 @@ def vote(idea_id):
     idea.votes += 1
     vote = Vote(idea_id=idea_id, voter_id=voter_id)
     db.session.add(vote)
-    db.session.commit()
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        flash('You already voted for this idea.', 'info')
+        return redirect(url_for('views.dashboard'))
+
     flash('Thanks for voting!', 'success')
     return redirect(url_for('views.dashboard'))
 
