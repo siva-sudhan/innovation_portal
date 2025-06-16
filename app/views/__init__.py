@@ -8,8 +8,6 @@ from io import BytesIO
 
 views_bp = Blueprint('views', __name__)
 
-
-
 @views_bp.route('/settings', methods=['GET', 'POST'])
 def settings():
     """Settings page shown after login allowing username updates."""
