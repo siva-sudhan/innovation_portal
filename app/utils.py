@@ -15,17 +15,22 @@ def get_current_username() -> str:
     except OSError:
         return getpass.getuser()
 
+
+def get_device_id() -> str:
+    """Return a persistent device identifier stored in the session."""
+    device_id = session.get('device_id')
+    if not device_id:
+        device_id = uuid.uuid4().hex
+        session['device_id'] = device_id
+    return device_id
+
 # 👤 Determine a stable identifier for voting
 def get_voter_id() -> str:
     """Return an identifier for the current voter."""
     if 'username' in session:
         return session['username']
 
-    device_id = session.get('device_id')
-    if not device_id:
-        device_id = str(uuid.getnode())
-        session['device_id'] = device_id
-    return device_id
+    return get_device_id()
 
 # 🔖 Generate keyword tags from title + description
 def generate_tags(text, top_n=5):
