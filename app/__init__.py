@@ -11,9 +11,11 @@ def create_app():
 
     db.init_app(app)
     csrf.init_app(app)
-
+    
     from app.views import views_bp
+    from app.views.auth import auth_bp
     app.register_blueprint(views_bp)
+    app.register_blueprint(auth_bp)
 
     # ✅ Automatically create database tables once at startup
     with app.app_context():

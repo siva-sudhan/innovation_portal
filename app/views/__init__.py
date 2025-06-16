@@ -4,6 +4,7 @@ from app.forms import IdeaForm
 from app.models import db, Idea
 from app.utils import generate_tags, export_ideas_to_excel, get_current_username
 from io import BytesIO
+from datetime import datetime
 
 views_bp = Blueprint('views', __name__)
 
@@ -41,6 +42,40 @@ def dashboard():
 def idea_detail(idea_id):
     idea = Idea.query.get_or_404(idea_id)
     return render_template('idea_detail.html', idea=idea)
+
+@views_bp.route('/idea/<int:idea_id>/edit', methods=['GET', 'POST'])
+def edit_idea(idea_id):
+    if session.get('role') != 'admin':
+        flash("Access denied.", "error")
+        return redirect(url_for('views.dashboard'))
+
+    idea = Idea.query.get_or_404(idea_id)
+    form = IdeaForm(obj=idea)
+
+    if form.validate_on_submit():
+        idea.title = form.title.data
+        idea.description = form.description.data
+        idea.is_anonymous = form.is_anonymous.data
+        idea.timestamp = datetime.utcnow()
+        db.session.commit()
+        flash("Idea updated successfully!", "success")
+        return redirect(url_for('views.dashboard'))
+
+    return render_template("edit_idea.html", form=form, idea=idea)
+
+
+# --- Delete Idea ---
+@views_bp.route('/idea/<int:idea_id>/delete')
+def delete_idea(idea_id):
+    if session.get('role') != 'admin':
+        flash("Access denied.", "error")
+        return redirect(url_for('views.dashboard'))
+
+    idea = Idea.query.get_or_404(idea_id)
+    db.session.delete(idea)
+    db.session.commit()
+    flash("Idea deleted.", "success")
+    return redirect(url_for('views.dashboard'))
 
 @views_bp.route('/export')
 def export_ideas():

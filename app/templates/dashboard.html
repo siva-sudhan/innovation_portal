@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Idea Dashboard{% endblock %}
+{% block title %}Innovation Hub – Dashboard{% endblock %}
 
 {% block content %}
   <h2>Submitted Ideas</h2>
   <p class="idea-count">🚀 {{ unique_user_count }} unique users have submitted ideas so far</p>
 
+  <h2>Welcome {{ session.username }}</h2>
+
+  {% if session.role == 'admin' %}
+    <p><strong>Role:</strong> Admin</p>
+  {% else %}
+    <p><strong>Role:</strong> User</p>
+  {% endif %}
+
   {% if ideas %}
+    <h3>Total Ideas: {{ ideas|length }}</h3>
+
     <table>
       <thead>
         <tr>
@@ -15,6 +25,9 @@
           <th>Submitted</th>
           <th>Votes</th>
           <th>Details</th>
+          {% if session.role == 'admin' %}
+            <th>Actions</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -25,15 +38,24 @@
             <td>{{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
             <td>{{ idea.votes }}</td>
             <td><a href="{{ url_for('views.idea_detail', idea_id=idea.id) }}">View</a></td>
+
+            {% if session.role == 'admin' %}
+              <td>
+                <a href="{{ url_for('views.edit_idea', idea_id=idea.id) }}">✏️ Edit</a> |
+                <a href="{{ url_for('views.delete_idea', idea_id=idea.id) }}" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
+              </td>
+            {% endif %}
           </tr>
         {% endfor %}
       </tbody>
     </table>
-    
-    <br>
-    <form method="GET" action="{{ url_for('views.export_ideas') }}">
-      <button type="submit">📤 Export to Excel</button>
-    </form>
+
+    {% if session.role == 'admin' %}
+      <br>
+      <form method="GET" action="{{ url_for('views.export_ideas') }}">
+        <button type="submit">📤 Export All Ideas to Excel</button>
+      </form>
+    {% endif %}
   {% else %}
     <p>No ideas submitted yet.</p>
   {% endif %}
