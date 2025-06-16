@@ -1,12 +1,41 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
-*.pyd
-.Python
-env/
+
+# Virtual environments
 venv/
 ENV/
-instance/*.pyc
-app/__pycache__/
-app/views/__pycache__/
+env/
+.venv/
 
+# Flask instance folder
+instance/*.sqlite
+instance/*.db
+instance/*.pyc
+instance/__pycache__/
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Test and coverage output
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+.cache
