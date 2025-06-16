@@ -4,6 +4,8 @@ import re
 import xlsxwriter
 import io
 from collections import Counter
+import uuid
+from flask import session
 
 # 🔑 Determine the current system username
 def get_current_username() -> str:
@@ -12,6 +14,18 @@ def get_current_username() -> str:
         return os.getlogin()
     except OSError:
         return getpass.getuser()
+
+# 👤 Determine a stable identifier for voting
+def get_voter_id() -> str:
+    """Return an identifier for the current voter."""
+    if 'username' in session:
+        return session['username']
+
+    device_id = session.get('device_id')
+    if not device_id:
+        device_id = str(uuid.getnode())
+        session['device_id'] = device_id
+    return device_id
 
 # 🔖 Generate keyword tags from title + description
 def generate_tags(text, top_n=5):
