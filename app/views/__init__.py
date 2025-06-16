@@ -9,6 +9,7 @@ from io import BytesIO
 views_bp = Blueprint('views', __name__)
 
 
+
 @views_bp.route('/settings', methods=['GET', 'POST'])
 def settings():
     """Settings page shown after login allowing username updates."""
@@ -63,6 +64,7 @@ def dashboard():
         vote_form=vote_form,
     )
 
+@views_bp.route('/idea/<int:idea_id>')
 def idea_detail(idea_id):
     idea = Idea.query.get_or_404(idea_id)
     voter_id = get_voter_id()
