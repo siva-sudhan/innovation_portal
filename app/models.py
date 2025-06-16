@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy import UniqueConstraint
 from . import db
 
 class Idea(db.Model):
@@ -14,3 +15,11 @@ class Idea(db.Model):
 
     def __repr__(self):
         return f'<Idea {self.id} - {self.title}>'
+
+
+class Vote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    idea_id = db.Column(db.Integer, db.ForeignKey('idea.id'), nullable=False)
+    voter_id = db.Column(db.String(150), nullable=False)
+
+    __table_args__ = (UniqueConstraint('idea_id', 'voter_id', name='unique_vote'),)
