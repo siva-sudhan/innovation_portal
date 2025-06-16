@@ -17,8 +17,12 @@
     <p>You already voted for this idea.</p>
   {% else %}
     <form method="POST" action="{{ url_for('views.vote', idea_id=idea.id) }}">
+
       {{ vote_form.hidden_tag() }}
       {{ vote_form.submit() }}
+
+
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     </form>
   {% endif %}
 

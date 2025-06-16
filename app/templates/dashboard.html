@@ -43,8 +43,10 @@
                 You voted
               {% else %}
                 <form method="POST" action="{{ url_for('views.vote', idea_id=idea.id) }}">
+
                   {{ vote_form.hidden_tag() }}
                   {{ vote_form.submit() }}
+                  
                 </form>
               {% endif %}
             </td>
