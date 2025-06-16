@@ -77,7 +77,6 @@ def edit_idea(idea_id):
 
     return render_template("edit_idea.html", form=form, idea=idea)
 
-
 # --- Delete Idea ---
 @views_bp.route('/idea/<int:idea_id>/delete')
 def delete_idea(idea_id):
