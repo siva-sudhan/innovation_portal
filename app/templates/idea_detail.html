@@ -10,7 +10,7 @@
 
   <p><strong>Tags:</strong> {{ idea.tags }}</p>
   <p><strong>Submitted:</strong> {{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
-  <p><strong>Submitted By:</strong> {{ 'Anonymous' if idea.is_anonymous else 'Identified User' }}</p>
+  <p><strong>Submitted By:</strong> {{ 'Anonymous' if idea.is_anonymous else idea.submitter }}</p>
   <p><strong>Votes:</strong> {{ idea.votes }}</p>
 
   {% if voted %}

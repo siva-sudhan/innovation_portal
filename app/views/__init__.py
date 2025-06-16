@@ -28,6 +28,10 @@ def settings():
 
 @views_bp.route('/', methods=['GET', 'POST'])
 def submit_idea():
+    if 'username' not in session:
+        flash('Please log in to submit an idea.', 'error')
+        return redirect(url_for('auth.login'))
+
     form = IdeaForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -121,6 +125,10 @@ def delete_idea(idea_id):
 
 @views_bp.route('/vote/<int:idea_id>', methods=['POST'])
 def vote(idea_id):
+    if 'username' not in session:
+        flash('Please log in to vote.', 'error')
+        return redirect(url_for('auth.login'))
+
     form = VoteForm()
     if not form.validate_on_submit():
         flash('Invalid vote submission.', 'error')
