@@ -118,3 +118,53 @@ def export_all_data():
     output.seek(0)
 
     return send_file(output, as_attachment=True, download_name='raw_idea_data.json')
+
+@admin_bp.route('/import', methods=['GET', 'POST'])
+def import_raw_data():
+    from flask_wtf.csrf import validate_csrf
+    from wtforms import ValidationError
+
+    if request.method == 'POST':
+        file = request.files.get('file')
+        csrf_token = request.form.get('csrf_token')
+
+        try:
+            validate_csrf(csrf_token)
+        except ValidationError:
+            flash('Invalid CSRF token.', 'error')
+            return redirect(request.url)
+
+        if not file or not file.filename.endswith('.json'):
+            flash('Please upload a valid JSON file.', 'error')
+            return redirect(request.url)
+
+        try:
+            data = json.load(file)
+            count_added = 0
+            for entry in data:
+                # Avoid inserting if exact title+description already exists
+                if Idea.query.filter_by(title=entry['title'], description=entry['description']).first():
+                    continue
+
+                idea = Idea(
+                    title=entry['title'],
+                    description=entry['description'],
+                    tags=entry.get('tags', ''),
+                    submitter=entry.get('submitter', 'unknown'),
+                    is_anonymous=entry.get('anonymous', False),
+                    timestamp=datetime.fromisoformat(entry['timestamp']),
+                    votes=entry.get('votes', 0)
+                )
+                db.session.add(idea)
+                count_added += 1
+
+            db.session.commit()
+            flash(f'Successfully imported {count_added} new ideas.', 'success')
+
+        except Exception as e:
+            flash(f'Import failed: {str(e)}', 'error')
+
+        return redirect(url_for('admin.admin_dashboard'))
+
+    return render_template('admin/import_data.html')
+
