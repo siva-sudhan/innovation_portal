@@ -43,7 +43,7 @@
                 You voted
               {% else %}
                 <form method="POST" action="{{ url_for('views.vote', idea_id=idea.id) }}">
-                  {{ csrf_token() }}
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                   <button type="submit">👍 Vote</button>
                 </form>
               {% endif %}
