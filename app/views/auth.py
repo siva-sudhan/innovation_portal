@@ -13,7 +13,7 @@ def login():
         user = form.username.data.strip()
         session['username'] = user
         session['role'] = 'admin' if is_admin(user) else 'user'
-        return redirect(url_for('views.landing'))
+        return redirect(url_for('views.settings'))
 
     return render_template('login.html', form=form)
 
