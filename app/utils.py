@@ -9,6 +9,7 @@ from flask import session
 from app.models import Idea
 from sqlalchemy import or_
 from urllib.parse import quote_plus
+<<<<<<< HEAD
 
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -36,6 +37,8 @@ def generate_tags(text, top_n=5):
     scored = list(zip(feature_array, scores))
     scored.sort(key=lambda x: x[1], reverse=True)
     return [term for term, _ in scored[:top_n]]
+=======
+>>>>>>> f7c65ee9a7f94d8a258f5bbd4812376def466361
 
 # 🔑 Determine the current system username
 def get_current_username() -> str:
