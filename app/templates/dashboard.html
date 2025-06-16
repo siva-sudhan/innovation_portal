@@ -6,12 +6,14 @@
   <h2>Submitted Ideas</h2>
   <p class="idea-count">🚀 {{ unique_user_count }} unique users have submitted ideas so far</p>
 
-  <h2>Welcome {{ session.username }}</h2>
+  {% if session.username %}
+    <h2>Welcome {{ session.username }}</h2>
 
-  {% if session.role == 'admin' %}
-    <p><strong>Role:</strong> Admin</p>
-  {% else %}
-    <p><strong>Role:</strong> User</p>
+    {% if session.role == 'admin' %}
+      <p><strong>Role:</strong> Admin</p>
+    {% else %}
+      <p><strong>Role:</strong> User</p>
+    {% endif %}
   {% endif %}
 
   {% if ideas %}
@@ -23,6 +25,7 @@
           <th>Title</th>
           <th>Tags</th>
           <th>Submitted</th>
+          <th>Submitted By</th>
           <th>Votes</th>
           <th>Vote</th>
           <th>Details</th>
@@ -37,6 +40,7 @@
             <td>{{ idea.title }}</td>
             <td>{{ idea.tags }}</td>
             <td>{{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ 'Anonymous' if idea.is_anonymous else idea.submitter }}</td>
             <td>{{ idea.votes }}</td>
             <td>
               {% if idea.id in voted_ideas %}
