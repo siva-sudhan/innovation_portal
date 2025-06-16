@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, session
 from datetime import datetime
 from app.forms import IdeaForm, VoteForm
+
+from app.forms import IdeaForm
 from app.models import db, Idea, Vote
 from app.utils import generate_tags, export_ideas_to_excel, get_current_username, get_voter_id
 from io import BytesIO
@@ -39,7 +41,9 @@ def dashboard():
     voter_id = get_voter_id()
     voted = Vote.query.filter_by(voter_id=voter_id).all()
     voted_ideas = {v.idea_id for v in voted}
+
     vote_form = VoteForm()
+
 
     return render_template(
         'dashboard.html',
@@ -47,6 +51,7 @@ def dashboard():
         unique_user_count=unique_user_count,
         voted_ideas=voted_ideas,
         vote_form=vote_form,
+
     )
 
 @views_bp.route('/idea/<int:idea_id>')
@@ -56,6 +61,9 @@ def idea_detail(idea_id):
     voted = Vote.query.filter_by(idea_id=idea.id, voter_id=voter_id).first() is not None
     vote_form = VoteForm()
     return render_template('idea_detail.html', idea=idea, voted=voted, vote_form=vote_form)
+
+    return render_template('idea_detail.html', idea=idea, voted=voted)
+
 
 @views_bp.route('/idea/<int:idea_id>/edit', methods=['GET', 'POST'])
 def edit_idea(idea_id):
