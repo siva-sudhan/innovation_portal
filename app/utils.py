@@ -1,7 +1,17 @@
+import os
+import getpass
 import re
 import xlsxwriter
 import io
 from collections import Counter
+
+# 🔑 Determine the current system username
+def get_current_username() -> str:
+    """Return the current system username in a robust way."""
+    try:
+        return os.getlogin()
+    except OSError:
+        return getpass.getuser()
 
 # 🔖 Generate keyword tags from title + description
 def generate_tags(text, top_n=5):
@@ -20,7 +30,7 @@ def export_ideas_to_excel(ideas):
     workbook = xlsxwriter.Workbook(output, {'in_memory': True})
     sheet = workbook.add_worksheet('Ideas')
 
-    headers = ['ID', 'Title', 'Description', 'Tags', 'Anonymous', 'Timestamp', 'Votes']
+    headers = ['ID', 'Title', 'Description', 'Tags', 'Submitter', 'Anonymous', 'Timestamp', 'Votes']
     for col, header in enumerate(headers):
         sheet.write(0, col, header)
 
@@ -29,9 +39,10 @@ def export_ideas_to_excel(ideas):
         sheet.write(row, 1, idea.title)
         sheet.write(row, 2, idea.description)
         sheet.write(row, 3, idea.tags)
-        sheet.write(row, 4, 'Yes' if idea.is_anonymous else 'No')
-        sheet.write(row, 5, idea.timestamp.strftime('%Y-%m-%d %H:%M'))
-        sheet.write(row, 6, idea.votes)
+        sheet.write(row, 4, idea.submitter or '')
+        sheet.write(row, 5, 'Yes' if idea.is_anonymous else 'No')
+        sheet.write(row, 6, idea.timestamp.strftime('%Y-%m-%d %H:%M'))
+        sheet.write(row, 7, idea.votes)
 
     workbook.close()
     output.seek(0)

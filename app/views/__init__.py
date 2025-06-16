@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from datetime import datetime
 from app.forms import IdeaForm
 from app.models import db, Idea
-from app.utils import generate_tags, export_ideas_to_excel
+from app.utils import generate_tags, export_ideas_to_excel, get_current_username
 from io import BytesIO
 
 views_bp = Blueprint('views', __name__)
@@ -20,6 +20,7 @@ def submit_idea():
             title=title,
             description=description,
             tags=tags,
+            submitter=get_current_username(),
             is_anonymous=is_anonymous,
             timestamp=datetime.utcnow()
         )
@@ -33,7 +34,8 @@ def submit_idea():
 @views_bp.route('/dashboard')
 def dashboard():
     ideas = Idea.query.order_by(Idea.timestamp.desc()).all()
-    return render_template('dashboard.html', ideas=ideas)
+    unique_user_count = db.session.query(Idea.submitter).filter(Idea.submitter != None).distinct().count()
+    return render_template('dashboard.html', ideas=ideas, unique_user_count=unique_user_count)
 
 @views_bp.route('/idea/<int:idea_id>')
 def idea_detail(idea_id):
