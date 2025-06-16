@@ -47,7 +47,6 @@ def dashboard():
         unique_user_count=unique_user_count,
         voted_ideas=voted_ideas,
         vote_form=vote_form,
-
     )
 
 @views_bp.route('/idea/<int:idea_id>')
@@ -57,7 +56,6 @@ def idea_detail(idea_id):
     voted = Vote.query.filter_by(idea_id=idea.id, voter_id=voter_id).first() is not None
     vote_form = VoteForm()
     return render_template('idea_detail.html', idea=idea, voted=voted, vote_form=vote_form)
-
 
 @views_bp.route('/idea/<int:idea_id>/edit', methods=['GET', 'POST'])
 def edit_idea(idea_id):
