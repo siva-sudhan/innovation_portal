@@ -9,18 +9,17 @@ from io import BytesIO
 views_bp = Blueprint('views', __name__)
 
 
-@views_bp.route('/landing', methods=['GET', 'POST'])
-def landing():
-    """Landing page shown after login allowing username updates."""
+@views_bp.route('/settings', methods=['GET', 'POST'])
+def settings():
+    """Settings page shown after login allowing username updates."""
     form = LoginForm()
     if form.validate_on_submit():
         user = form.username.data.strip()
         session['username'] = user
         session['role'] = 'admin' if is_admin(user) else 'user'
         flash('Username updated.', 'success')
-        return redirect(url_for('views.landing'))
-
-    return render_template('landing.html', form=form)
+        return redirect(url_for('views.settings'))
+    return render_template('settings.html', form=form)
 
 @views_bp.route('/', methods=['GET', 'POST'])
 def submit_idea():
@@ -35,7 +34,7 @@ def submit_idea():
             title=title,
             description=description,
             tags=tags,
-            submitter=get_current_username(),
+            submitter=session.get('username', get_current_username()),
             is_anonymous=is_anonymous,
             timestamp=datetime.utcnow()
         )
