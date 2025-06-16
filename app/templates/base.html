@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>{% block title %}Innovation Portal{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Innovation Portal</h1>
+        <nav>
+            <a href="{{ url_for('main.dashboard') }}">Dashboard</a> |
+            <a href="{{ url_for('main.submit') }}">Submit Idea</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

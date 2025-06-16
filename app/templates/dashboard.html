@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Welcome to the dashboard</h2>
+<ul>
+    {% for idea in ideas %}
+    <li><a href="{{ url_for('main.idea_detail', idea_id=loop.index0) }}">{{ idea.title }}</a></li>
+    {% else %}
+    <li>No ideas submitted yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
