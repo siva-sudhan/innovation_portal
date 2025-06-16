@@ -8,6 +8,7 @@ import uuid
 from flask import session
 from app.models import Idea
 from sqlalchemy import or_
+from urllib.parse import quote_plus
 
 # 🔑 Determine the current system username
 def get_current_username() -> str:
@@ -60,7 +61,7 @@ def find_similar_ideas(new_idea_tags, exclude_id=None, max_results=5):
 # 🌐 Generate Google Patents search URL
 def generate_patent_search_url(title, tags):
     query_terms = title + " " + " ".join(tags)
-    query_string = re.sub(r'\s+', '+', query_terms.strip())
+    query_string = quote_plus(query_terms.strip())
     return f"https://patents.google.com/?q={query_string}"
 
 # 📦 Export list of ideas to Excel
