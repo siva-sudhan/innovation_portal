@@ -16,6 +16,9 @@ def create_app():
     from app.views.auth import auth_bp
     app.register_blueprint(views_bp)
     app.register_blueprint(auth_bp)
+    
+    from app.views.gamification import gamification_bp
+    app.register_blueprint(gamification_bp)
 
     # ✅ Late import to avoid circular import
     from app.utils import generate_teams_link

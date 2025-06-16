@@ -37,6 +37,8 @@ def submit_idea():
         title = form.title.data
         description = form.description.data
         is_anonymous = form.is_anonymous.data
+        teammates = form.teammates.data.strip()
+        intent = form.intent.data
         tags_list = generate_tags(f"{title} {description}")
         tags = ','.join(tags_list)
 
@@ -44,6 +46,8 @@ def submit_idea():
             title=title,
             description=description,
             tags=tags,
+            teammates=teammates,
+            intent=intent,
             submitter=session.get('username', get_current_username()),
             is_anonymous=is_anonymous,
             timestamp=datetime.utcnow()
@@ -51,7 +55,6 @@ def submit_idea():
         db.session.add(idea)
         db.session.commit()
 
-        # Fetch similar ideas and Google Patent suggestions
         similar_ideas = find_similar_ideas(tags_list, exclude_id=idea.id)
         patent_url = generate_patent_search_url(title, tags_list)
 
@@ -115,6 +118,8 @@ def edit_idea(idea_id):
         idea.title = form.title.data
         idea.description = form.description.data
         idea.is_anonymous = form.is_anonymous.data
+        idea.teammates = form.teammates.data.strip()
+        idea.intent = form.intent.data
         idea.timestamp = datetime.utcnow()
         db.session.commit()
         flash("Idea updated successfully!", "success")

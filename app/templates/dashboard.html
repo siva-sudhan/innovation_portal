@@ -62,4 +62,44 @@
   {% else %}
     <p>No ideas submitted yet.</p>
   {% endif %}
+  <div class="leaderboard-section">
+    <h3 class="leaderboard-title">🏆 Top Ideas by Votes</h3>
+    <table class="leaderboard-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Owner</th>
+          <th>Votes</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-list">
+        <tr><td colspan="3">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    async function fetchLeaderboard() {
+      try {
+        const res = await fetch('/api/leaderboard');
+        const data = await res.json();
+        const tbody = document.getElementById('leaderboard-list');
+        tbody.innerHTML = '';
+  
+        data.forEach(entry => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${entry.title}</td>
+            <td>${entry.submitter || 'Anonymous'}</td>
+            <td>${entry.votes}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Leaderboard fetch error", err);
+      }
+    }
+  
+    fetchLeaderboard();
+    setInterval(fetchLeaderboard, 5000);
+  </script>
 {% endblock %}

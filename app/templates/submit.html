@@ -25,6 +25,22 @@
         {% endif %}
       </div>
 
+      <div class="form-group">
+        {{ form.teammates.label }}<br>
+        {{ form.teammates(class="input", placeholder="Optional – List teammates, comma-separated") }}
+        {% if form.teammates.errors %}
+          <div class="error">{{ form.teammates.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.intent.label }}<br>
+        {{ form.intent(class="input") }}
+        {% if form.intent.errors %}
+          <div class="error">{{ form.intent.errors[0] }}</div>
+        {% endif %}
+      </div>
+
       <div class="form-group checkbox">
         {{ form.is_anonymous() }}
         {{ form.is_anonymous.label }}
@@ -35,5 +51,39 @@
         {{ form.submit(class="submit-button") }}
       </div>
     </form>
+</div>
+  <div class="live-stats-wrapper">
+    <h3 class="stats-title">📈 Live Innovation Stats</h3>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-ideas">0</div>
+        <div class="stat-label">Ideas Submitted</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-users">0</div>
+        <div class="stat-label">Unique Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-votes">0</div>
+        <div class="stat-label">Total Votes</div>
+      </div>
+    </div>
   </div>
+  <script>
+    async function fetchStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+  
+        document.getElementById('stat-ideas').textContent = data.ideas;
+        document.getElementById('stat-users').textContent = data.users;
+        document.getElementById('stat-votes').textContent = data.votes;
+      } catch (err) {
+        console.error("Failed to fetch stats", err);
+      }
+    }
+  
+    fetchStats();
+    setInterval(fetchStats, 5000); // Update every 5 seconds
+  </script>
 {% endblock %}

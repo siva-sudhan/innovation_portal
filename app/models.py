@@ -8,6 +8,8 @@ class Idea(db.Model):
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=False)
     tags = db.Column(db.String(300))
+    teammates = db.Column(db.String(200))  # 🧑‍🤝‍🧑 New field
+    intent = db.Column(db.String(50))      # 🎯 New field
     submitter = db.Column(db.String(150))
     is_anonymous = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
@@ -15,7 +17,6 @@ class Idea(db.Model):
 
     def __repr__(self):
         return f'<Idea {self.id} - {self.title}>'
-
 
 class Vote(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,10 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, TextAreaField, BooleanField, SubmitField, SelectField
+from wtforms.validators import DataRequired, Length, Optional
 
 class IdeaForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=5, max=150)])
     description = TextAreaField('Description', validators=[DataRequired(), Length(min=10)])
+    teammates = StringField('Teammates (comma-separated)', validators=[Optional(), Length(max=250)])
+    intent = SelectField('Your Role in this Idea', choices=[
+        ('owner', 'I want to own and implement this idea'),
+        ('mentor', 'I want to mentor others on this idea'),
+        ('visionary', 'I just believe this idea should exist')
+    ], validators=[DataRequired()])
     is_anonymous = BooleanField('Submit Anonymously')
     submit = SubmitField('Submit Idea')
 
@@ -14,6 +20,5 @@ class VoteForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    """Simple form to capture a username for login/rename."""
     username = StringField('Username', validators=[DataRequired(), Length(min=1, max=150)])
     submit = SubmitField('Continue')

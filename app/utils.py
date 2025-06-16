@@ -8,6 +8,32 @@ import uuid
 from flask import session
 from app.models import Idea
 from sqlalchemy import or_
+import re
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Manually defined lightweight stopwords list
+STATIC_STOPWORDS = set([
+    'the', 'and', 'is', 'in', 'to', 'of', 'for', 'a', 'an', 'with', 'on', 'this',
+    'that', 'it', 'as', 'are', 'was', 'by', 'be', 'or', 'from', 'you', 'your',
+    'our', 'at', 'will', 'can', 'more', 'such', 'if', 'should'
+])
+
+def generate_tags(text, top_n=5):
+    """Generate top N relevant tags using TF-IDF."""
+    # Clean and filter words
+    words = re.findall(r'\b[a-z]{3,}\b', text.lower())
+    filtered_text = ' '.join(w for w in words if w not in STATIC_STOPWORDS)
+
+    # Use TF-IDF to extract keywords
+    vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+    tfidf_matrix = vectorizer.fit_transform([filtered_text])
+    feature_array = vectorizer.get_feature_names_out()
+    scores = tfidf_matrix.toarray()[0]
+
+    # Get top terms
+    scored = list(zip(feature_array, scores))
+    scored.sort(key=lambda x: x[1], reverse=True)
+    return [term for term, _ in scored[:top_n]]
 
 # 🔑 Determine the current system username
 def get_current_username() -> str:

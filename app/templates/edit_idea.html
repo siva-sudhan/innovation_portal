@@ -12,11 +12,33 @@
       <div class="form-group">
         <label>{{ form.title.label }}</label><br>
         {{ form.title(size=60, class="input-text") }}
+        {% if form.title.errors %}
+          <div class="error">{{ form.title.errors[0] }}</div>
+        {% endif %}
       </div>
 
       <div class="form-group">
         <label>{{ form.description.label }}</label><br>
         {{ form.description(rows=6, cols=60, class="input-textarea") }}
+        {% if form.description.errors %}
+          <div class="error">{{ form.description.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label>{{ form.teammates.label }}</label><br>
+        {{ form.teammates(class="input-text") }}
+        {% if form.teammates.errors %}
+          <div class="error">{{ form.teammates.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label>{{ form.intent.label }}</label><br>
+        {{ form.intent(class="input-text") }}
+        {% if form.intent.errors %}
+          <div class="error">{{ form.intent.errors[0] }}</div>
+        {% endif %}
       </div>
 
       <div class="form-group checkbox-group">

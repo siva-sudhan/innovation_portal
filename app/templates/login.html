@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 
-{% block title %}Innovation Hub – Login{% endblock %}
+{% block title %}Login – Innovation Hub{% endblock %}
 
 {% block content %}
-  <h2 class="page-heading">🔐 Login to Innovation Hub</h2>
+  <div class="login-form-wrapper fade-in">
+    <h2>👋 Welcome to Innovation Hub</h2>
+    <p>Please enter your name to log in.</p>
 
-  <div class="card fade-in">
     <form method="POST" class="login-form">
       {{ form.hidden_tag() }}
 
       <div class="form-group">
-        <label>{{ form.username.label }}</label><br>
-        {{ form.username(size=40, class="input-text") }}
+        {{ form.username.label }}<br>
+        {{ form.username(class="input-text", placeholder="e.g., s.sudhan") }}
         {% if form.username.errors %}
           <div class="error">{{ form.username.errors[0] }}</div>
         {% endif %}
@@ -22,4 +23,39 @@
       </div>
     </form>
   </div>
+
+  <div class="live-stats-wrapper">
+    <h3 class="stats-title">📈 Live Innovation Stats</h3>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-ideas">0</div>
+        <div class="stat-label">Ideas Submitted</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-users">0</div>
+        <div class="stat-label">Unique Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-votes">0</div>
+        <div class="stat-label">Total Votes</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        document.getElementById('stat-ideas').textContent = data.ideas;
+        document.getElementById('stat-users').textContent = data.users;
+        document.getElementById('stat-votes').textContent = data.votes;
+      } catch (err) {
+        console.error("Failed to fetch stats", err);
+      }
+    }
+
+    fetchStats();
+    setInterval(fetchStats, 5000);
+  </script>
 {% endblock %}
