@@ -52,9 +52,7 @@ def dashboard():
         voted_ideas=voted_ideas,
         vote_form=vote_form,
 
-    )
 
-@views_bp.route('/idea/<int:idea_id>')
 def idea_detail(idea_id):
     idea = Idea.query.get_or_404(idea_id)
     voter_id = get_voter_id()
