@@ -11,10 +11,13 @@
     <nav>
       <a href="{{ url_for('views.submit_idea') }}">Submit Idea</a> |
       <a href="{{ url_for('views.dashboard') }}">Dashboard</a>
+      {% if session.username %}
+        | <a href="{{ url_for('views.settings') }}">Settings</a>
+        | <a href="{{ url_for('auth.logout') }}">Logout</a>
+      {% else %}
+        | <a href="{{ url_for('auth.login') }}">Login</a>
+      {% endif %}
     </nav>
-    {% if session.username %}
-      <p>Welcome {{ session.username }}!</p>
-    {% endif %}
     <hr>
   </header>
 
