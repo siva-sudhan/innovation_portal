@@ -28,20 +28,16 @@
   <div class="similar-ideas">
     <h3>💡 Similar Ideas</h3>
     <ul>
-      {% for sim in similar_ideas %}
+        {% for sim in similar_ideas %}
         <li>
-          <a href="{{ url_for('views.idea_detail', idea_id=sim.id) }}">
+            <a href="{{ url_for('views.idea_detail', idea_id=sim.id) }}">
             {{ sim.title }}
-          </a> – {{ sim.tags }}
-        </li>
-        <li>
-        <a href="{{ url_for('views.idea_detail', idea_id=sim.id) }}">{{ sim.title }}</a>
-        – {{ sim.tags }}
-        {% if not sim.is_anonymous and sim.submitter %}
+            </a> – {{ sim.tags }}
+            {% if not sim.is_anonymous and sim.submitter and sim.submitter != session.username %}
             <a href="{{ generate_teams_link(sim.submitter) }}" target="_blank" class="connect-btn">💬 Connect</a>
-        {% endif %}
+            {% endif %}
         </li>
-      {% endfor %}
+        {% endfor %}
     </ul>
   </div>
 {% endif %}

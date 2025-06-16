@@ -273,6 +273,22 @@ body {
   color: #28a745;
 }
 
+.connect-btn {
+  background-color: #0078D4;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 0.9em;
+  display: inline-block;
+  margin-top: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.connect-btn:hover {
+  background-color: #005ea2;
+}
+
 .admin-actions {
   margin-top: 10px;
   font-size: 0.85em;

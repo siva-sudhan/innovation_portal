@@ -39,7 +39,11 @@
               </form>
             {% endif %}
           </div>
-
+          {% if not idea.is_anonymous and idea.submitter and idea.submitter != session.username %}
+            <p>
+                <a href="{{ generate_teams_link(idea.submitter) }}" target="_blank" class="connect-btn">💬 Chat on Teams</a>
+            </p>
+          {% endif %}
           <p><a href="{{ url_for('views.idea_detail', idea_id=idea.id) }}">🔍 View Details</a></p>
 
           {% if session.role == 'admin' %}
