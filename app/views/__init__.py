@@ -1,11 +1,26 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, session
 from datetime import datetime
-from app.forms import IdeaForm, VoteForm
+from app.forms import IdeaForm, VoteForm, LoginForm
 from app.models import db, Idea, Vote
 from app.utils import generate_tags, export_ideas_to_excel, get_current_username, get_voter_id
+from app.auth import is_admin
 from io import BytesIO
 
 views_bp = Blueprint('views', __name__)
+
+
+@views_bp.route('/landing', methods=['GET', 'POST'])
+def landing():
+    """Landing page shown after login allowing username updates."""
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = form.username.data.strip()
+        session['username'] = user
+        session['role'] = 'admin' if is_admin(user) else 'user'
+        flash('Username updated.', 'success')
+        return redirect(url_for('views.landing'))
+
+    return render_template('landing.html', form=form)
 
 @views_bp.route('/', methods=['GET', 'POST'])
 def submit_idea():
