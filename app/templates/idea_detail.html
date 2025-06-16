@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
-{% block title %}Idea Detail{% endblock %}
+
+{% block title %}Idea Details{% endblock %}
+
 {% block content %}
-<h2>{{ idea.title }}</h2>
-<p>{{ idea.description }}</p>
-<a href="{{ url_for('main.dashboard') }}">Back to dashboard</a>
+  <h2>{{ idea.title }}</h2>
+
+  <p><strong>Description:</strong></p>
+  <p>{{ idea.description }}</p>
+
+  <p><strong>Tags:</strong> {{ idea.tags }}</p>
+  <p><strong>Submitted:</strong> {{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+  <p><strong>Submitted By:</strong> {{ 'Anonymous' if idea.is_anonymous else 'Identified User' }}</p>
+  <p><strong>Votes:</strong> {{ idea.votes }}</p>
+
+  <br>
+  <a href="{{ url_for('views.dashboard') }}">← Back to Dashboard</a>
 {% endblock %}

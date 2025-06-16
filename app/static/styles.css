@@ -1,11 +1,81 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0 1rem;
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
-header {
-    background-color: #f0f0f0;
-    padding: 1rem 0.5rem;
-    margin-bottom: 1rem;
+header h1 {
+  margin-bottom: 5px;
 }
+
+nav a {
+  margin-right: 15px;
+  text-decoration: none;
+  color: #007acc;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+h2 {
+  color: #444;
+  margin-top: 0;
+}
+
+form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+}
+
+button,
+input[type="submit"] {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #007acc;
+  border: none;
+  color: white;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #005f99;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #eee;
+}
+
+.flash {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-left: 5px solid;
+}
+
+.flash.success { background-color: #e6ffed; border-color: #2ecc71; }
+.flash.error { background-color: #ffe6e6; border-color: #e74c3c; }
+.flash.warning { background-color: #fff8e1; border-color: #f1c40f; }

@@ -1,12 +1,9 @@
-"""Form definitions for the application."""
-
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField
-from wtforms.validators import DataRequired
-
+from wtforms import StringField, TextAreaField, BooleanField, SubmitField
+from wtforms.validators import DataRequired, Length
 
 class IdeaForm(FlaskForm):
-    """Simple form for submitting an innovation idea."""
-
-    title = StringField('Title', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired(), Length(min=5, max=150)])
+    description = TextAreaField('Description', validators=[DataRequired(), Length(min=10)])
+    is_anonymous = BooleanField('Submit Anonymously')
+    submit = SubmitField('Submit Idea')

@@ -1,12 +1,39 @@
 {% extends 'base.html' %}
-{% block title %}Dashboard{% endblock %}
+
+{% block title %}Idea Dashboard{% endblock %}
+
 {% block content %}
-<h2>Welcome to the dashboard</h2>
-<ul>
-    {% for idea in ideas %}
-    <li><a href="{{ url_for('main.idea_detail', idea_id=loop.index0) }}">{{ idea.title }}</a></li>
-    {% else %}
-    <li>No ideas submitted yet.</li>
-    {% endfor %}
-</ul>
+  <h2>Submitted Ideas</h2>
+
+  {% if ideas %}
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Tags</th>
+          <th>Submitted</th>
+          <th>Votes</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for idea in ideas %}
+          <tr>
+            <td>{{ idea.title }}</td>
+            <td>{{ idea.tags }}</td>
+            <td>{{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ idea.votes }}</td>
+            <td><a href="{{ url_for('views.idea_detail', idea_id=idea.id) }}">View</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+    <br>
+    <form method="GET" action="{{ url_for('views.export_ideas') }}">
+      <button type="submit">📤 Export to Excel</button>
+    </form>
+  {% else %}
+    <p>No ideas submitted yet.</p>
+  {% endif %}
 {% endblock %}
