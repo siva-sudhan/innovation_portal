@@ -1,6 +1,5 @@
 import os
 import getpass
-import re
 import xlsxwriter
 import io
 from collections import Counter
