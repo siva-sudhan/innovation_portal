@@ -3,12 +3,10 @@ import getpass
 import re
 import xlsxwriter
 import io
-from collections import Counter
 import uuid
 from flask import session
 from sqlalchemy import or_
 from urllib.parse import quote_plus
-import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Manually defined lightweight stopwords list
@@ -18,8 +16,13 @@ STATIC_STOPWORDS = set([
     'our', 'at', 'will', 'can', 'more', 'such', 'if', 'should'
 ])
 
-def generate_tags(text, top_n=5):
-    """Generate top N relevant tags using TF-IDF."""
+def generate_tags(text: str, top_n: int = 5) -> list[str]:
+    """Return the top ``top_n`` keyword tags for ``text``.
+
+    The input text is cleaned of lightweight stopwords and analyzed
+    using ``TfidfVectorizer`` to surface the most relevant single or
+    bi-gram terms.
+    """
     # Clean and filter words
     words = re.findall(r'\b[a-z]{3,}\b', text.lower())
     filtered_text = ' '.join(w for w in words if w not in STATIC_STOPWORDS)
@@ -59,16 +62,6 @@ def get_voter_id() -> str:
         return session['username']
     return get_device_id()
 
-# 🔖 Generate keyword tags from title + description
-def generate_tags(text, top_n=5):
-    words = re.findall(r'\b\w+\b', text.lower())
-    stopwords = set([
-        'the', 'and', 'is', 'in', 'to', 'of', 'for', 'a', 'an', 'with', 'on',
-        'this', 'that', 'it', 'as', 'are', 'was', 'by', 'be', 'or', 'from'
-    ])
-    filtered = [w for w in words if w not in stopwords and len(w) > 2]
-    most_common = Counter(filtered).most_common(top_n)
-    return [word for word, _ in most_common]
 
 # 🔍 Find similar ideas in the portal by matching tags
 def find_similar_ideas(new_idea_tags, exclude_id=None, max_results=5):
