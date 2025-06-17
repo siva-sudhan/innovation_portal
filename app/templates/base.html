@@ -5,6 +5,7 @@
   <title>{% block title %}Innovation Hub{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block head_extra %}{% endblock %}
 </head>
 <body>
   <header class="header-bar">
@@ -50,5 +51,6 @@
       </p>
     </div>
   </footer>
+  {% block scripts %}{% endblock %}
 </body>
 </html>
