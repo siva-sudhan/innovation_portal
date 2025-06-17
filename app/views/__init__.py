@@ -38,7 +38,7 @@ def submit_idea():
         title = form.title.data
         description = form.description.data
         is_anonymous = form.is_anonymous.data
-        teammates = form.teammates.data.strip()
+        teammates = form.teammates.data.strip() if form.teammates.data else ""
         intent = form.intent.data
         tags_list = generate_tags(f"{title} {description}")
         tags = ','.join(tags_list)
@@ -121,7 +121,7 @@ def edit_idea(idea_id):
         idea.title = form.title.data
         idea.description = form.description.data
         idea.is_anonymous = form.is_anonymous.data
-        idea.teammates = form.teammates.data.strip()
+        idea.teammates = form.teammates.data.strip() if form.teammates.data else ""
         idea.intent = form.intent.data
         idea.timestamp = datetime.utcnow()
         db.session.commit()
