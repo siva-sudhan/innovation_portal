@@ -6,7 +6,7 @@ import uuid
 from flask import session
 from sqlalchemy import or_
 from urllib.parse import quote_plus
-from typing import Optional
+from typing import Optional, List
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -17,7 +17,7 @@ STATIC_STOPWORDS = set([
     'our', 'at', 'will', 'can', 'more', 'such', 'if', 'should'
 ])
 
-def generate_tags(text: str, top_n: int = 5) -> list[str]:
+def generate_tags(text: str, top_n: int = 5) -> List[str]:
     """Return the top ``top_n`` keyword tags for ``text``.
 
     The input text is cleaned of lightweight stopwords and analyzed
