@@ -90,7 +90,7 @@ def export_ideas_to_excel(ideas):
     workbook = xlsxwriter.Workbook(output, {'in_memory': True})
     sheet = workbook.add_worksheet('Ideas')
 
-    headers = ['ID', 'Title', 'Description', 'Tags', 'Submitter', 'Anonymous', 'Timestamp', 'Votes']
+    headers = ['ID', 'Title', 'Description', 'Tags', 'Submitter', 'Role Preference', 'Timestamp', 'Votes']
     for col, header in enumerate(headers):
         sheet.write(0, col, header)
 
@@ -100,7 +100,7 @@ def export_ideas_to_excel(ideas):
         sheet.write(row, 2, idea.description)
         sheet.write(row, 3, idea.tags)
         sheet.write(row, 4, idea.submitter or '')
-        sheet.write(row, 5, 'Yes' if idea.is_anonymous else 'No')
+        sheet.write(row, 5, idea.intent or '')
         sheet.write(row, 6, idea.timestamp.strftime('%Y-%m-%d %H:%M'))
         sheet.write(row, 7, idea.votes)
 
