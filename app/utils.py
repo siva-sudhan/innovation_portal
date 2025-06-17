@@ -1,12 +1,13 @@
 import os
 import getpass
-import re
 import xlsxwriter
 import io
 import uuid
 from flask import session
 from sqlalchemy import or_
 from urllib.parse import quote_plus
+from typing import Optional
+import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Manually defined lightweight stopwords list
@@ -107,7 +108,7 @@ def export_ideas_to_excel(ideas):
     output.seek(0)
     return output
 
-def generate_teams_link(username: str, message: str | None = None) -> str:
+def generate_teams_link(username: str, message: Optional[str] = None) -> str:
     """Return a Microsoft Teams chat link with an optional custom message."""
     base = "https://teams.microsoft.com/l/chat/0/0"
     if message is None:
