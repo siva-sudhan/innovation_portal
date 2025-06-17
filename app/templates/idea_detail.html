@@ -41,5 +41,12 @@
     </ul>
   </div>
 {% endif %}
+{% if session.username == idea.submitter %}
+  <div class="section">
+    <h3>📄 Related Patents</h3>
+    <p>Explore similar patents that align with your idea.</p>
+    <a href="{{ patent_url }}" target="_blank" rel="noopener" class="btn btn-secondary">🔗 View on Google Patents</a>
+  </div>
+{% endif %}
   <a href="{{ url_for('views.dashboard') }}">← Back to Dashboard</a>
 {% endblock %}

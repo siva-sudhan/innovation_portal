@@ -46,7 +46,7 @@
           {% endif %}
           <p><a href="{{ url_for('views.idea_detail', idea_id=idea.id) }}">🔍 View Details</a></p>
 
-          {% if session.role == 'admin' %}
+          {% if session.role == 'admin' or session.username == idea.submitter %}
             <div class="admin-actions">
               <a href="{{ url_for('views.edit_idea', idea_id=idea.id) }}">✏️ Edit</a> |
               <a href="{{ url_for('views.delete_idea', idea_id=idea.id) }}" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
