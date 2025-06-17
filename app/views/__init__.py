@@ -97,22 +97,24 @@ def idea_detail(idea_id):
     # ✅ Find similar ideas (by tags)
     tags_list = [tag.strip() for tag in idea.tags.split(',')] if idea.tags else []
     similar_ideas = find_similar_ideas(tags_list, exclude_id=idea.id)
+    patent_url = generate_patent_search_url(idea.title, tags_list)
 
     return render_template(
         'idea_detail.html',
         idea=idea,
         voted=voted,
         vote_form=vote_form,
-        similar_ideas=similar_ideas
+        similar_ideas=similar_ideas,
+        patent_url=patent_url
     )
 
 @views_bp.route('/idea/<int:idea_id>/edit', methods=['GET', 'POST'])
 def edit_idea(idea_id):
-    if session.get('role') != 'admin':
+    idea = Idea.query.get_or_404(idea_id)
+    if session.get('role') != 'admin' and session.get('username') != idea.submitter:
         flash("Access denied.", "error")
         return redirect(url_for('views.dashboard'))
 
-    idea = Idea.query.get_or_404(idea_id)
     form = IdeaForm(obj=idea)
 
     if form.validate_on_submit():
@@ -130,11 +132,11 @@ def edit_idea(idea_id):
 
 @views_bp.route('/idea/<int:idea_id>/delete')
 def delete_idea(idea_id):
-    if session.get('role') != 'admin':
+    idea = Idea.query.get_or_404(idea_id)
+    if session.get('role') != 'admin' and session.get('username') != idea.submitter:
         flash("Access denied.", "error")
         return redirect(url_for('views.dashboard'))
 
-    idea = Idea.query.get_or_404(idea_id)
     db.session.delete(idea)
     db.session.commit()
     flash("Idea deleted.", "success")
