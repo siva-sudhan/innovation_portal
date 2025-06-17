@@ -553,6 +553,10 @@ a.btn:hover,
   opacity: 1;
 }
 
+.idea-description {
+  margin-bottom: 1em;
+}
+
 .about-popup {
   display: none;
   position: fixed;
