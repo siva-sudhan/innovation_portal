@@ -114,7 +114,12 @@ def export_ideas_to_excel(ideas):
     output.seek(0)
     return output
 
-def generate_teams_link(username: str) -> str:
+def generate_teams_link(username: str, message: str | None = None) -> str:
+    """Return a Microsoft Teams chat link with an optional custom message."""
     base = "https://teams.microsoft.com/l/chat/0/0"
-    message = f"Hi! I found your idea on the Innovation Hub and would love to collaborate."
-    return f"{base}?users={username}@caterpillar.com&message={message}"
+    if message is None:
+        message = (
+            "Hi! I found your idea on the Innovation Hub and would love to collaborate."
+        )
+    encoded = quote_plus(message)
+    return f"{base}?users={username}@caterpillar.com&message={encoded}"

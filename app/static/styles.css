@@ -537,3 +537,39 @@ a.btn:hover,
 .flash.success { background-color: #e6ffed; border-color: #2ecc71; }
 .flash.error { background-color: #ffe6e6; border-color: #e74c3c; }
 .flash.warning { background-color: #fff8e1; border-color: #f1c40f; }
+
+/* About section */
+.about-link {
+  opacity: 0.4;
+  margin-top: 5px;
+}
+
+.about-link a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.about-link a:hover {
+  opacity: 1;
+}
+
+.about-popup {
+  display: none;
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  font-size: 0.9em;
+  z-index: 1000;
+  text-align: center;
+}
+
+.about-link:hover + .about-popup,
+.about-popup:hover {
+  display: block;
+}
