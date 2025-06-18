@@ -15,12 +15,15 @@
     {% endif %}
   </div>
 
-  <div class="toggle-container">
-    <label class="switch">
-      <input type="checkbox" id="mineToggle" onclick="toggleFilter(this)" {{ 'checked' if filter_my else '' }}>
-      <span class="slider"></span>
-    </label>
-    <span class="toggle-label">{{ 'My Submissions' if filter_my else 'All Submissions' }}</span>
+  <div class="controls-row">
+    <input type="text" id="keywordSearch" placeholder="Filter by keyword">
+    <div class="toggle-container">
+      <label class="switch">
+        <input type="checkbox" id="mineToggle" onclick="toggleFilter(this)" {{ 'checked' if filter_my else '' }}>
+        <span class="slider"></span>
+      </label>
+      <span class="toggle-label">{{ 'My Submissions' if filter_my else 'All Submissions' }}</span>
+    </div>
   </div>
 
   {% if ideas %}
@@ -115,5 +118,46 @@
   
     fetchLeaderboard();
     setInterval(fetchLeaderboard, 5000);
+
+    const searchInput = document.getElementById('keywordSearch');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => filterCards(searchInput.value));
+    }
+
+    function filterCards(query) {
+      const cards = document.querySelectorAll('.idea-card');
+      cards.forEach(card => {
+        removeHighlights(card);
+        if (!query) {
+          card.style.display = '';
+        } else if (card.innerText.toLowerCase().includes(query.toLowerCase())) {
+          card.style.display = '';
+          highlightMatches(card, query);
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function highlightMatches(card, text) {
+      const regex = new RegExp('(' + escapeReg(text) + ')', 'gi');
+      const titleEl = card.querySelector('h3');
+      if (titleEl) {
+        titleEl.innerHTML = titleEl.textContent.replace(regex, '<span class="keyword-highlight">$1</span>');
+      }
+      card.querySelectorAll('.tag').forEach(tagEl => {
+        tagEl.innerHTML = tagEl.textContent.replace(regex, '<span class="keyword-highlight">$1</span>');
+      });
+    }
+
+    function removeHighlights(card) {
+      card.querySelectorAll('.keyword-highlight').forEach(span => {
+        span.replaceWith(span.textContent);
+      });
+    }
+
+    function escapeReg(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
   </script>
 {% endblock %}
