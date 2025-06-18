@@ -28,8 +28,11 @@ def create_app():
     app.register_blueprint(gamification_bp)
 
     # Jinja global functions
-    from app.utils import generate_teams_link
-    app.jinja_env.globals.update(generate_teams_link=generate_teams_link)
+    from app.utils import generate_teams_link, get_logo_path
+    app.jinja_env.globals.update(
+        generate_teams_link=generate_teams_link,
+        get_logo_path=get_logo_path,
+    )
 
     # Create DB tables
     with app.app_context():

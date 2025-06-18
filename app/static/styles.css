@@ -144,6 +144,12 @@ body {
   margin: 0;
 }
 
+.site-title img {
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
 .nav-links a {
   color: #FFCD00;
   text-decoration: none;

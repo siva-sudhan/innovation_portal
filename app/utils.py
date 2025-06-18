@@ -10,6 +10,17 @@ from typing import Optional, List
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+def get_logo_path() -> Optional[str]:
+    """Return the relative path of the first logo image in ``static/images``."""
+    images_dir = os.path.join(os.path.dirname(__file__), 'static', 'images')
+    if not os.path.isdir(images_dir):
+        return None
+
+    for name in sorted(os.listdir(images_dir)):
+        if name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+            return f'images/{name}'
+    return None
+
 # Manually defined lightweight stopwords list
 STATIC_STOPWORDS = set([
     'the', 'and', 'is', 'in', 'to', 'of', 'for', 'a', 'an', 'with', 'on', 'this',

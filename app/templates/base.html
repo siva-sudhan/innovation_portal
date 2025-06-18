@@ -9,7 +9,15 @@
 <body>
   <header class="header-bar">
     <div class="header-content">
-      <h1 class="site-title">🚀 Innovation Hub</h1>
+      <h1 class="site-title">
+        {% set logo = get_logo_path() %}
+        {% if logo %}
+          <img src="{{ url_for('static', filename=logo) }}" alt="logo">
+        {% else %}
+          🚀
+        {% endif %}
+        Innovation Hub
+      </h1>
       <nav class="nav-links">
         <a href="{{ url_for('views.submit_idea') }}">Submit Idea</a>
         <a href="{{ url_for('views.dashboard') }}">Dashboard</a>
