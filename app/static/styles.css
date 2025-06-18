@@ -659,3 +659,7 @@ a.btn:hover,
   background-color: #FFCD00;
   color: #000;
 }
+
+.idea-description {
+  white-space: pre-line;
+}
