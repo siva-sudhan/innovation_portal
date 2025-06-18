@@ -15,6 +15,14 @@
     {% endif %}
   </div>
 
+  <div class="toggle-container">
+    <label class="switch">
+      <input type="checkbox" id="mineToggle" onclick="toggleFilter(this)" {{ 'checked' if filter_my else '' }}>
+      <span class="slider"></span>
+    </label>
+    <span class="toggle-label">{{ 'My Submissions' if filter_my else 'All Submissions' }}</span>
+  </div>
+
   {% if ideas %}
     <div class="idea-grid">
       {% for idea in ideas %}
@@ -78,6 +86,12 @@
     </table>
   </div>
   <script>
+    function toggleFilter(cb) {
+      const url = new URL(window.location);
+      url.searchParams.set('mine', cb.checked ? '1' : '0');
+      window.location = url.toString();
+    }
+
     async function fetchLeaderboard() {
       try {
         const res = await fetch('/api/leaderboard');
