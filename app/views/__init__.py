@@ -71,7 +71,11 @@ def submit_idea():
 
 @views_bp.route('/dashboard')
 def dashboard():
-    ideas = Idea.query.order_by(Idea.timestamp.desc()).all()
+    filter_my = request.args.get('mine') == '1'
+    query = Idea.query.order_by(Idea.timestamp.desc())
+    if filter_my and session.get('username'):
+        query = query.filter_by(submitter=session['username'])
+    ideas = query.all()
     unique_user_count = db.session.query(Idea.submitter).filter(Idea.submitter.isnot(None)).distinct().count()
 
     voter_id = get_voter_id()
@@ -85,6 +89,7 @@ def dashboard():
         unique_user_count=unique_user_count,
         voted_ideas=voted_ideas,
         vote_form=vote_form,
+        filter_my=filter_my,
     )
 
 @views_bp.route('/idea/<int:idea_id>')
