@@ -567,9 +567,11 @@ a.btn:hover,
   font-size: 0.9em;
   z-index: 1000;
   text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.about-link:hover + .about-popup,
-.about-popup:hover {
+.about-popup.active {
   display: block;
+  opacity: 1;
 }
