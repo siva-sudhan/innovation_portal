@@ -638,3 +638,24 @@ a.btn:hover,
   font-size: 0.9em;
   vertical-align: middle;
 }
+
+/* Controls row above idea cards */
+.controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.controls-row input[type="text"] {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  max-width: 250px;
+}
+
+/* Highlight text when filtering */
+.keyword-highlight {
+  background-color: #FFCD00;
+  color: #000;
+}
