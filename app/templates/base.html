@@ -42,7 +42,7 @@
 
   <footer class="footer">
     <p>💡 Made for team collaboration and innovation at Caterpillar Inc.</p>
-    <p class="about-link"><a href="#" id="about-link">About</a></p>
+    <p class="about-link"><a href="#" id="about-link">Click to see details</a></p>
     <div id="about-popup" class="about-popup">
       <p>
         Innovation Hub for crowdsourcing ideas. Created by
@@ -50,5 +50,31 @@
       </p>
     </div>
   </footer>
+  <script>
+    const aboutLink = document.getElementById('about-link');
+    const aboutPopup = document.getElementById('about-popup');
+    let hideTimeout;
+
+    function showPopup() {
+      clearTimeout(hideTimeout);
+      aboutPopup.classList.add('active');
+      hideTimeout = setTimeout(hidePopup, 5000);
+    }
+
+    function hidePopup() {
+      aboutPopup.classList.remove('active');
+    }
+
+    aboutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      showPopup();
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!aboutPopup.contains(e.target) && e.target !== aboutLink) {
+        hidePopup();
+      }
+    });
+  </script>
 </body>
 </html>
