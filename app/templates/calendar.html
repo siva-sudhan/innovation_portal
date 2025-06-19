@@ -41,13 +41,23 @@
     const month = {{ month }};
     const year = {{ year }};
     const monthPicker = document.getElementById('monthPicker');
+
+    function parseUTC(dateStr) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      return new Date(Date.UTC(y, m - 1, d));
+    }
+
+    function formatUTC(dateObj) {
+      return dateObj.toISOString().slice(0, 10);
+    }
+
     function getEventsMap() {
       const map = {};
       events.forEach(ev => {
-        const start = new Date(ev.start_date);
-        const end = new Date(ev.end_date);
-        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-          const key = d.toISOString().slice(0,10);
+        const start = parseUTC(ev.start_date);
+        const end = parseUTC(ev.end_date);
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          const key = formatUTC(d);
           if (!map[key]) map[key] = [];
           map[key].push(ev);
         }
@@ -56,9 +66,9 @@
     }
 
     function renderCalendar(m, y) {
-      const firstDay = new Date(y, m-1, 1);
-      const lastDay = new Date(y, m, 0).getDate();
-      const startDay = firstDay.getDay();
+      const firstDay = new Date(Date.UTC(y, m-1, 1));
+      const lastDay = new Date(Date.UTC(y, m, 0)).getUTCDate();
+      const startDay = firstDay.getUTCDay();
       const body = document.getElementById('calendarBody');
       const eventsMap = getEventsMap();
       body.innerHTML = '';
@@ -72,8 +82,8 @@
           row = document.createElement('tr');
         }
         const cell = document.createElement('td');
-        const cellDate = new Date(y, m-1, date);
-        const key = cellDate.toISOString().slice(0,10);
+        const cellDate = new Date(Date.UTC(y, m-1, date));
+        const key = formatUTC(cellDate);
         cell.innerHTML = `<div class="day-number">${date}</div>`;
         if (eventsMap[key]) {
           const ev = eventsMap[key][0];
