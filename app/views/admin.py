@@ -137,7 +137,8 @@ def new_event():
         db.session.commit()
         flash('Event added.', 'success')
         return redirect(url_for('admin.new_event'))
-    return render_template('admin/new_event.html', form=form)
+    events = Event.query.order_by(Event.start_date.desc()).all()
+    return render_template('admin/new_event.html', form=form, events=events)
 
 @admin_bp.route('/events/<int:event_id>/delete')
 def delete_event(event_id):

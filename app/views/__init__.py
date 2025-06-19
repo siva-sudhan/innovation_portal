@@ -195,11 +195,21 @@ def events():
     start_month = datetime(year, month, 1).date()
     end_month = datetime(year, month, monthrange(year, month)[1]).date()
 
-    events = (
+    events_query = (
         Event.query
         .filter(Event.start_date <= end_month, Event.end_date >= start_month)
         .all()
     )
+    events = [
+        {
+            'id': ev.id,
+            'title': ev.title,
+            'start_date': ev.start_date.isoformat(),
+            'end_date': ev.end_date.isoformat(),
+            'color': ev.color,
+        }
+        for ev in events_query
+    ]
 
     month_name = datetime(year, month, 1).strftime('%b %Y').upper()
 
