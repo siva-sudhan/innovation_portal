@@ -35,13 +35,12 @@
     {% endfor %}
   </ul>
   {% endif %}
+
   <script>
     const events = {{ events|tojson }};
     const month = {{ month }};
     const year = {{ year }};
-
     const monthPicker = document.getElementById('monthPicker');
-
     function getEventsMap() {
       const map = {};
       events.forEach(ev => {
@@ -88,12 +87,12 @@
         body.appendChild(row);
       }
     }
-
     monthPicker.addEventListener('change', () => {
       const [y, m] = monthPicker.value.split('-');
       const params = new URLSearchParams(window.location.search);
       params.set('month', parseInt(m));
       params.set('year', parseInt(y));
+
       window.location.search = params.toString();
     });
 

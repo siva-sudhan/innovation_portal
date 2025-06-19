@@ -139,7 +139,6 @@ def new_event():
         return redirect(url_for('admin.new_event'))
     return render_template('admin/new_event.html', form=form)
 
-
 @admin_bp.route('/events/<int:event_id>/delete')
 def delete_event(event_id):
     event = Event.query.get_or_404(event_id)

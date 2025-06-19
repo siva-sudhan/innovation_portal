@@ -18,6 +18,10 @@
       {{ form.end_date.label }}<br>
       {{ form.end_date(class="input", type="date") }}
     </div>
+    <div class="form-group">
+      {{ form.color.label }}<br>
+      {{ form.color(class="input", type="color") }}
+    </div>
     {{ form.submit(class="btn-primary") }}
   </form>
 {% endblock %}
