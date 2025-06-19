@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, session
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
-from app.forms import IdeaForm, VoteForm, LoginForm
-from app.models import db, Idea, Vote
+from app.forms import IdeaForm, VoteForm, LoginForm, EventForm
+from app.models import db, Idea, Vote, Event
 from app.utils import (
     generate_tags,
     export_ideas_to_excel,
@@ -184,3 +184,26 @@ def export_ideas():
     ideas = Idea.query.order_by(Idea.timestamp.desc()).all()
     output = export_ideas_to_excel(ideas)
     return send_file(output, as_attachment=True, download_name='ideas.xlsx')
+
+
+@views_bp.route('/events')
+def events():
+    from calendar import monthrange
+    month = request.args.get('month', type=int) or datetime.utcnow().month
+    year = request.args.get('year', type=int) or datetime.utcnow().year
+
+    start_month = datetime(year, month, 1).date()
+    end_month = datetime(year, month, monthrange(year, month)[1]).date()
+
+    events = (
+        Event.query
+        .filter(Event.start_date <= end_month, Event.end_date >= start_month)
+        .all()
+    )
+
+    return render_template(
+        'calendar.html',
+        month=month,
+        year=year,
+        events=events,
+    )

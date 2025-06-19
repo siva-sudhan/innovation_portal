@@ -21,6 +21,7 @@
       <nav class="nav-links">
         <a href="{{ url_for('views.submit_idea') }}">Submit Idea</a>
         <a href="{{ url_for('views.dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('views.events') }}">Events</a>
         {% if session.username %}
           {% if session.role == 'admin' %}
             <a href="{{ url_for('admin.admin_dashboard') }}">Admin Panel</a>

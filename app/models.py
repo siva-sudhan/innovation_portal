@@ -24,3 +24,14 @@ class Vote(db.Model):
     voter_id = db.Column(db.String(150), nullable=False)
 
     __table_args__ = (UniqueConstraint('idea_id', 'voter_id', name='unique_vote'),)
+
+
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150), nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+    color = db.Column(db.String(20), default="#FFCD00")
+
+    def __repr__(self):
+        return f"<Event {self.title} {self.start_date} - {self.end_date}>"

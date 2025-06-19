@@ -1,5 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, BooleanField, SubmitField, SelectField
+from wtforms import (
+    StringField,
+    TextAreaField,
+    BooleanField,
+    SubmitField,
+    SelectField,
+    DateField,
+)
 from wtforms.validators import DataRequired, Length, Optional
 
 class IdeaForm(FlaskForm):
@@ -22,3 +29,11 @@ class VoteForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=1, max=150)])
     submit = SubmitField('Continue')
+
+
+class EventForm(FlaskForm):
+    title = StringField('Event Title', validators=[DataRequired(), Length(max=150)])
+    start_date = DateField('Start Date', validators=[DataRequired()], format='%Y-%m-%d')
+    end_date = DateField('End Date', validators=[DataRequired()], format='%Y-%m-%d')
+    color = StringField('Color Hex', validators=[Optional(), Length(max=20)], default='#FFCD00')
+    submit = SubmitField('Add Event')

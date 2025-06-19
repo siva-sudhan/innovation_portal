@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Events Calendar{% endblock %}
+
+{% block content %}
+  <h2 class="page-heading">Events Calendar</h2>
+  <div class="calendar-controls">
+    <label>Month
+      <input type="range" id="monthSlider" min="1" max="12" value="{{ month }}">
+    </label>
+    <label>Year
+      <input type="range" id="yearSlider" min="2020" max="2100" value="{{ year }}">
+    </label>
+  </div>
+  <table class="calendar" id="calendarTable">
+    <thead>
+      <tr>
+        <th>Sun</th>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+      </tr>
+    </thead>
+    <tbody id="calendarBody">
+    </tbody>
+  </table>
+  <script>
+    const events = {{ events|tojson }};
+    const month = {{ month }};
+    const year = {{ year }};
+
+    const monthSlider = document.getElementById('monthSlider');
+    const yearSlider = document.getElementById('yearSlider');
+
+    function getEventsMap() {
+      const map = {};
+      events.forEach(ev => {
+        const start = new Date(ev.start_date);
+        const end = new Date(ev.end_date);
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+          const key = d.toISOString().slice(0,10);
+          if (!map[key]) map[key] = [];
+          map[key].push(ev);
+        }
+      });
+      return map;
+    }
+
+    function renderCalendar(m, y) {
+      const firstDay = new Date(y, m-1, 1);
+      const lastDay = new Date(y, m, 0).getDate();
+      const startDay = firstDay.getDay();
+      const body = document.getElementById('calendarBody');
+      const eventsMap = getEventsMap();
+      body.innerHTML = '';
+      let row = document.createElement('tr');
+      for (let i=0;i<startDay;i++) {
+        row.appendChild(document.createElement('td'));
+      }
+      for (let date=1; date<=lastDay; date++) {
+        if (row.children.length === 7) {
+          body.appendChild(row);
+          row = document.createElement('tr');
+        }
+        const cell = document.createElement('td');
+        const cellDate = new Date(y, m-1, date);
+        const key = cellDate.toISOString().slice(0,10);
+        cell.innerHTML = `<div class="day-number">${date}</div>`;
+        if (eventsMap[key]) {
+          const ev = eventsMap[key][0];
+          cell.style.backgroundColor = ev.color;
+          cell.title = eventsMap[key].map(e=>e.title).join('\n');
+        }
+        row.appendChild(cell);
+      }
+      if (row.children.length) {
+        while (row.children.length < 7) row.appendChild(document.createElement('td'));
+        body.appendChild(row);
+      }
+    }
+
+    monthSlider.addEventListener('change', () => {
+      const params = new URLSearchParams(window.location.search);
+      params.set('month', monthSlider.value);
+      params.set('year', yearSlider.value);
+      window.location.search = params.toString();
+    });
+    yearSlider.addEventListener('change', () => {
+      const params = new URLSearchParams(window.location.search);
+      params.set('month', monthSlider.value);
+      params.set('year', yearSlider.value);
+      window.location.search = params.toString();
+    });
+
+    renderCalendar(month, year);
+  </script>
+{% endblock %}
