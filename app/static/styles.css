@@ -663,3 +663,26 @@ a.btn:hover,
 .idea-description {
   white-space: pre-line;
 }
+
+/* Calendar */
+.calendar {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.calendar th, .calendar td {
+  border: 1px solid #ddd;
+  width: 14.2%;
+  height: 80px;
+  vertical-align: top;
+  position: relative;
+}
+.calendar-controls {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.day-number {
+  font-weight: bold;
+}

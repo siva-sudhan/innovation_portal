@@ -1,8 +1,9 @@
 # File: app/views/admin.py
 
 from flask import Blueprint, render_template, session, redirect, url_for, flash, request, send_file
-from app.models import db, Idea
+from app.models import db, Idea, Event
 from app.auth import is_admin
+from app.forms import EventForm
 import os, json
 from datetime import datetime
 from collections import defaultdict
@@ -118,6 +119,23 @@ def export_all_data():
     output.seek(0)
 
     return send_file(output, as_attachment=True, download_name='raw_idea_data.json')
+
+
+@admin_bp.route('/events/new', methods=['GET', 'POST'])
+def new_event():
+    form = EventForm()
+    if form.validate_on_submit():
+        event = Event(
+            title=form.title.data,
+            start_date=form.start_date.data,
+            end_date=form.end_date.data,
+            color=form.color.data or '#FFCD00',
+        )
+        db.session.add(event)
+        db.session.commit()
+        flash('Event added.', 'success')
+        return redirect(url_for('admin.new_event'))
+    return render_template('admin/new_event.html', form=form)
 
 @admin_bp.route('/import', methods=['GET', 'POST'])
 def import_raw_data():
