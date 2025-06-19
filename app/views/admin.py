@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, session, redirect, url_for, flash,
 from app.models import db, Idea, Event
 from app.auth import is_admin
 from app.forms import EventForm
+import random
 import os, json
 from datetime import datetime
 from collections import defaultdict
@@ -125,17 +126,26 @@ def export_all_data():
 def new_event():
     form = EventForm()
     if form.validate_on_submit():
+        color = '#' + ''.join(random.choices('0123456789ABCDEF', k=6))
         event = Event(
             title=form.title.data,
             start_date=form.start_date.data,
             end_date=form.end_date.data,
-            color=form.color.data or '#FFCD00',
+            color=color,
         )
         db.session.add(event)
         db.session.commit()
         flash('Event added.', 'success')
         return redirect(url_for('admin.new_event'))
     return render_template('admin/new_event.html', form=form)
+
+@admin_bp.route('/events/<int:event_id>/delete')
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    db.session.delete(event)
+    db.session.commit()
+    flash('Event deleted.', 'success')
+    return redirect(request.referrer or url_for('views.events'))
 
 @admin_bp.route('/import', methods=['GET', 'POST'])
 def import_raw_data():

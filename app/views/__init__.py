@@ -201,9 +201,12 @@ def events():
         .all()
     )
 
+    month_name = datetime(year, month, 1).strftime('%b %Y').upper()
+
     return render_template(
         'calendar.html',
         month=month,
         year=year,
+        month_name=month_name,
         events=events,
     )

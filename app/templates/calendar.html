@@ -3,14 +3,9 @@
 {% block title %}Events Calendar{% endblock %}
 
 {% block content %}
-  <h2 class="page-heading">Events Calendar</h2>
+  <h2 class="page-heading">Events Calendar - {{ month_name }}</h2>
   <div class="calendar-controls">
-    <label>Month
-      <input type="range" id="monthSlider" min="1" max="12" value="{{ month }}">
-    </label>
-    <label>Year
-      <input type="range" id="yearSlider" min="2020" max="2100" value="{{ year }}">
-    </label>
+    <input type="month" id="monthPicker" value="{{ '%04d-%02d'|format(year, month) }}">
   </div>
   <table class="calendar" id="calendarTable">
     <thead>
@@ -27,14 +22,25 @@
     <tbody id="calendarBody">
     </tbody>
   </table>
+  {% if session.role == 'admin' %}
+  <h3>Events This Month</h3>
+  <ul>
+    {% for ev in events %}
+      <li>
+        <span style="background-color: {{ ev.color }}; padding: 2px 6px;">{{ ev.title }} ({{ ev.start_date }} - {{ ev.end_date }})</span>
+        <a href="{{ url_for('admin.delete_event', event_id=ev.id) }}" onclick="return confirm('Delete this event?');">Delete</a>
+      </li>
+    {% else %}
+      <li>No events</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
   <script>
     const events = {{ events|tojson }};
     const month = {{ month }};
     const year = {{ year }};
-
-    const monthSlider = document.getElementById('monthSlider');
-    const yearSlider = document.getElementById('yearSlider');
-
+    const monthPicker = document.getElementById('monthPicker');
     function getEventsMap() {
       const map = {};
       events.forEach(ev => {
@@ -81,17 +87,12 @@
         body.appendChild(row);
       }
     }
+    monthPicker.addEventListener('change', () => {
+      const [y, m] = monthPicker.value.split('-');
+      const params = new URLSearchParams(window.location.search);
+      params.set('month', parseInt(m));
+      params.set('year', parseInt(y));
 
-    monthSlider.addEventListener('change', () => {
-      const params = new URLSearchParams(window.location.search);
-      params.set('month', monthSlider.value);
-      params.set('year', yearSlider.value);
-      window.location.search = params.toString();
-    });
-    yearSlider.addEventListener('change', () => {
-      const params = new URLSearchParams(window.location.search);
-      params.set('month', monthSlider.value);
-      params.set('year', yearSlider.value);
       window.location.search = params.toString();
     });
 
