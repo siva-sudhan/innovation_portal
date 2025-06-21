@@ -22,19 +22,19 @@
     <tbody id="calendarBody">
     </tbody>
   </table>
-  {% if session.role == 'admin' %}
   <h3>Events This Month</h3>
   <ul>
     {% for ev in events %}
       <li>
         <span style="background-color: {{ ev.color }}; padding: 2px 6px;">{{ ev.title }} ({{ ev.start_date }} - {{ ev.end_date }})</span>
-        <a href="{{ url_for('admin.delete_event', event_id=ev.id) }}" onclick="return confirm('Delete this event?');">Delete</a>
+        {% if session.role == 'admin' %}
+          <a href="{{ url_for('admin.delete_event', event_id=ev.id) }}" onclick="return confirm('Delete this event?');">Delete</a>
+        {% endif %}
       </li>
     {% else %}
       <li>No events</li>
     {% endfor %}
   </ul>
-  {% endif %}
 
   <script>
     const events = {{ events|tojson }};
@@ -86,9 +86,14 @@
         const key = formatUTC(cellDate);
         cell.innerHTML = `<div class="day-number">${date}</div>`;
         if (eventsMap[key]) {
-          const ev = eventsMap[key][0];
-          cell.style.backgroundColor = ev.color;
-          cell.title = eventsMap[key].map(e=>e.title).join('\n');
+          cell.title = eventsMap[key].map(e => e.title).join('\n');
+          eventsMap[key].forEach(ev => {
+            const part = document.createElement('div');
+            part.className = 'event-part';
+            part.style.backgroundColor = ev.color;
+            part.textContent = ev.title;
+            cell.appendChild(part);
+          });
         }
         row.appendChild(cell);
       }
