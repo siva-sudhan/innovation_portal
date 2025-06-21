@@ -686,3 +686,15 @@ a.btn:hover,
 .day-number {
   font-weight: bold;
 }
+
+.event-part {
+  display: block;
+  font-size: 0.7em;
+  color: #fff;
+  padding: 2px 4px;
+  border-radius: 3px;
+  margin-top: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
