@@ -4,8 +4,9 @@
 
 {% block content %}
   <h2 class="page-heading">Events Calendar - {{ month_name }}</h2>
-  <div class="calendar-controls">
-    <input type="month" id="monthPicker" value="{{ '%04d-%02d'|format(year, month) }}">
+  <div class="calendar-controls" style="position: relative; display: inline-block;">
+    <input type="text" id="monthPicker" value="{{ month_name }}" readonly>
+    <div id="monthDropdown" class="month-dropdown"></div>
   </div>
   <table class="calendar" id="calendarTable">
     <thead>
@@ -41,6 +42,66 @@
     const month = {{ month }};
     const year = {{ year }};
     const monthPicker = document.getElementById('monthPicker');
+    const monthDropdown = document.getElementById('monthDropdown');
+
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    let dropdownYear = year;
+
+    function buildMonthDropdown() {
+      monthDropdown.innerHTML = '';
+      const yearNav = document.createElement('div');
+      yearNav.className = 'year-nav';
+      const prev = document.createElement('button');
+      prev.type = 'button';
+      prev.textContent = '\u25C0';
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.textContent = '\u25B6';
+      const yearSpan = document.createElement('span');
+      yearSpan.id = 'currentYear';
+      yearNav.appendChild(prev);
+      yearNav.appendChild(yearSpan);
+      yearNav.appendChild(next);
+      monthDropdown.appendChild(yearNav);
+
+      const grid = document.createElement('div');
+      grid.className = 'month-grid';
+      months.forEach((m, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'month-cell';
+        if (i + 1 === month && dropdownYear === year) {
+          cell.classList.add('selected');
+        }
+        cell.textContent = m;
+        cell.addEventListener('click', () => {
+          monthPicker.value = `${m} ${dropdownYear}`;
+          const params = new URLSearchParams(window.location.search);
+          params.set('month', i + 1);
+          params.set('year', dropdownYear);
+          window.location.search = params.toString();
+        });
+        grid.appendChild(cell);
+      });
+      monthDropdown.appendChild(grid);
+
+      function refresh() {
+        yearSpan.textContent = dropdownYear;
+      }
+      refresh();
+      prev.onclick = () => { dropdownYear--; refresh(); };
+      next.onclick = () => { dropdownYear++; refresh(); };
+    }
+
+    buildMonthDropdown();
+
+    monthPicker.addEventListener('click', () => {
+      monthDropdown.classList.toggle('active');
+    });
+    document.addEventListener('click', e => {
+      if (!monthPicker.contains(e.target) && !monthDropdown.contains(e.target)) {
+        monthDropdown.classList.remove('active');
+      }
+    });
 
     function parseUTC(dateStr) {
       const [y, m, d] = dateStr.split('-').map(Number);
@@ -102,15 +163,6 @@
         body.appendChild(row);
       }
     }
-    monthPicker.addEventListener('change', () => {
-      const [y, m] = monthPicker.value.split('-');
-      const params = new URLSearchParams(window.location.search);
-      params.set('month', parseInt(m));
-      params.set('year', parseInt(y));
-
-      window.location.search = params.toString();
-    });
-
     renderCalendar(month, year);
   </script>
 {% endblock %}
