@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
+from .backup import restore_latest_backup, start_scheduler
 
 
 
@@ -34,8 +35,10 @@ def create_app():
         get_logo_path=get_logo_path,
     )
 
-    # Create DB tables
+    # Restore DB if needed and create tables
     with app.app_context():
+        restore_latest_backup()
         db.create_all()
+        start_scheduler()
 
     return app
