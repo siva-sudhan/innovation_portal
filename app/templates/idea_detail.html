@@ -14,6 +14,12 @@
   <p><strong>Role Preference:</strong> {{ idea.intent }}</p>
   <p><strong>Votes:</strong> {{ idea.votes }}</p>
 
+  {% if not idea.is_anonymous and idea.submitter and idea.submitter != session.username %}
+    <p>
+      <a href="{{ generate_teams_link(idea.submitter) }}" target="_blank" class="connect-btn">💬 Chat on Teams</a>
+    </p>
+  {% endif %}
+
   {% if voted %}
     <p>You already voted for this idea.</p>
   {% else %}
