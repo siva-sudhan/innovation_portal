@@ -1,7 +1,7 @@
 # File: app/views/admin.py
 
 from flask import Blueprint, render_template, session, redirect, url_for, flash, request, send_file
-from app.models import db, Idea, Event
+from app.models import db, Idea, Event, Vote
 from app.auth import is_admin
 from app.forms import EventForm
 import random
@@ -42,11 +42,11 @@ def admin_dashboard():
             users_data[idea.submitter]['count'] += 1
             users_data[idea.submitter]['ideas'].append(idea)
 
-    # Simulated live stats
+    # Live stats based on current data
     live_stats = {
-        'online_users': 7,
-        'total_visits': 204,
-        'today_ideas': Idea.query.filter(Idea.timestamp >= datetime.utcnow().date()).count()
+        'ideas': Idea.query.count(),
+        'users': Idea.query.with_entities(Idea.submitter).distinct().count(),
+        'votes': Vote.query.count(),
     }
 
     return render_template("admin/admin_dashboard.html", user_stats=users_data, live_stats=live_stats)
@@ -120,6 +120,16 @@ def export_all_data():
     output.seek(0)
 
     return send_file(output, as_attachment=True, download_name='raw_idea_data.json')
+
+
+@admin_bp.route('/refresh-votes', methods=['POST'])
+def refresh_votes():
+    """Recalculate vote totals for all ideas."""
+    for idea in Idea.query.all():
+        idea.votes = Vote.query.filter_by(idea_id=idea.id).count()
+    db.session.commit()
+    flash('Vote counts refreshed.', 'success')
+    return redirect(url_for('admin.admin_dashboard'))
 
 
 @admin_bp.route('/events/new', methods=['GET', 'POST'])

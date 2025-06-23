@@ -47,11 +47,15 @@
   </div>
 
   <div class="card live-stats fade-in">
-    <h3>📊 Live User Stats</h3>
+    <h3>📊 Live Innovation Stats</h3>
     <ul class="stats-list">
-      <li>Online Users: <strong>{{ live_stats.online_users }}</strong></li>
-      <li>Total Visits: <strong>{{ live_stats.total_visits }}</strong></li>
-      <li>Ideas Today: <strong>{{ live_stats.today_ideas }}</strong></li>
+      <li>Total Ideas: <strong>{{ live_stats.ideas }}</strong></li>
+      <li>Unique Submitters: <strong>{{ live_stats.users }}</strong></li>
+      <li>Total Votes: <strong>{{ live_stats.votes }}</strong></li>
     </ul>
+    <form action="{{ url_for('admin.refresh_votes') }}" method="post" class="refresh-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn btn-secondary">🔄 Refresh Vote Counts</button>
+    </form>
   </div>
 {% endblock %}
