@@ -142,6 +142,9 @@ def delete_idea(idea_id):
         flash("Access denied.", "error")
         return redirect(url_for('views.dashboard'))
 
+    # Remove votes tied to this idea so stats remain accurate
+    Vote.query.filter_by(idea_id=idea.id).delete()
+
     db.session.delete(idea)
     db.session.commit()
     flash("Idea deleted.", "success")
