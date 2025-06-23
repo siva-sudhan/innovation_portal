@@ -153,6 +153,7 @@
             part.className = 'event-part';
             part.style.backgroundColor = ev.color;
             part.textContent = ev.title;
+            part.title = `${ev.title} (${ev.start_date} - ${ev.end_date})`;
             cell.appendChild(part);
           });
         }

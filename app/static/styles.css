@@ -669,6 +669,7 @@ a.btn:hover,
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  table-layout: fixed;
 }
 .calendar th, .calendar td {
   border: 1px solid #ddd;
@@ -742,4 +743,6 @@ a.btn:hover,
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  width: 100%;
+  box-sizing: border-box;
 }
