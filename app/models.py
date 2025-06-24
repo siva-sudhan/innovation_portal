@@ -42,6 +42,8 @@ class DisplayMessage(db.Model):
     text = db.Column(db.String(500), nullable=False)
     color = db.Column(db.String(20), default="#FF0000")
     blink = db.Column(db.Boolean, default=False)
+    enabled = db.Column(db.Boolean, default=True)
+    scroll = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
         return f"<DisplayMessage {self.text[:20]}>"

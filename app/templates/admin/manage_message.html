@@ -17,6 +17,12 @@
     <div class="form-group checkbox">
       {{ form.blink() }} {{ form.blink.label }}
     </div>
+    <div class="form-group checkbox">
+      {{ form.enabled() }} {{ form.enabled.label }}
+    </div>
+    <div class="form-group checkbox">
+      {{ form.scroll() }} {{ form.scroll.label }}
+    </div>
     {{ form.submit(class="btn-primary") }}
   </form>
 {% endblock %}

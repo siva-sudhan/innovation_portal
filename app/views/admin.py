@@ -161,6 +161,8 @@ def manage_message():
         message.text = form.text.data
         message.color = form.color.data or '#FF0000'
         message.blink = form.blink.data
+        message.enabled = form.enabled.data
+        message.scroll = form.scroll.data
         db.session.add(message)
         db.session.commit()
         flash('Display message updated.', 'success')
@@ -170,6 +172,8 @@ def manage_message():
         form.text.data = message.text
         form.color.data = message.color
         form.blink.data = message.blink
+        form.enabled.data = message.enabled
+        form.scroll.data = message.scroll
 
     return render_template('admin/manage_message.html', form=form)
 

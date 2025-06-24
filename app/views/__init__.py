@@ -34,7 +34,7 @@ def submit_idea():
         return redirect(url_for('auth.login'))
 
     form = IdeaForm()
-    display_message = DisplayMessage.query.first()
+    display_message = DisplayMessage.query.filter_by(enabled=True).first()
     if form.validate_on_submit():
         title = form.title.data
         description = form.description.data
