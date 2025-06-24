@@ -774,10 +774,11 @@ a.btn:hover,
 .message-link {
   color: inherit;
   text-decoration: none;
+  display: block;
 }
 
 .scrolling-message span::after {
-  content: attr(data-text) '\2003';
+  content: attr(data-text) '\2003' attr(data-text) '\2003' attr(data-text) '\2003' attr(data-text) '\2003';
 }
 
 .blink {

@@ -160,7 +160,10 @@ def manage_message():
             message = DisplayMessage()
         message.text = form.text.data
         message.color = form.color.data or '#FF0000'
-        message.link = form.link.data or None
+        link_input = form.link.data.strip() if form.link.data else None
+        if link_input and not link_input.startswith(('http://', 'https://')):
+            link_input = 'https://' + link_input
+        message.link = link_input
         message.blink = form.blink.data
         message.enabled = form.enabled.data
         message.scroll = form.scroll.data

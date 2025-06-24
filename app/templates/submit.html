@@ -5,23 +5,17 @@
 {% block content %}
   {% if display_message and display_message.enabled %}
     {% if display_message.scroll %}
-      <div class="scrolling-message{% if display_message.blink %} blink{% endif %}" style="color: {{ display_message.color }};">
-        <span data-text="{{ display_message.text }}">
-          {% if display_message.link %}
-            <a href="{{ display_message.link }}" class="message-link" target="_blank">{{ display_message.text }}</a>&emsp;
-          {% else %}
-            {{ display_message.text }}&emsp;
-          {% endif %}
-        </span>
-      </div>
+      {% if display_message.link %}<a href="{{ display_message.link }}" class="message-link" target="_blank">{% endif %}
+        <div class="scrolling-message{% if display_message.blink %} blink{% endif %}" style="color: {{ display_message.color }};">
+          <span data-text="{{ display_message.text }}">{{ display_message.text }}</span>
+        </div>
+      {% if display_message.link %}</a>{% endif %}
     {% else %}
-      <div class="static-message{% if display_message.blink %} blink{% endif %}" style="color: {{ display_message.color }};">
-        {% if display_message.link %}
-          <a href="{{ display_message.link }}" class="message-link" target="_blank">{{ display_message.text }}</a>
-        {% else %}
+      {% if display_message.link %}<a href="{{ display_message.link }}" class="message-link" target="_blank">{% endif %}
+        <div class="static-message{% if display_message.blink %} blink{% endif %}" style="color: {{ display_message.color }};">
           {{ display_message.text }}
-        {% endif %}
-      </div>
+        </div>
+      {% if display_message.link %}</a>{% endif %}
     {% endif %}
   {% endif %}
   <div class="idea-form-wrapper animate-fade-in">
