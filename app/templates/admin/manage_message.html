@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Display Message{% endblock %}
+
+{% block content %}
+  <h2>Configure Display Message</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.text.label }}<br>
+      {{ form.text(class="input") }}
+    </div>
+    <div class="form-group">
+      {{ form.color.label }}<br>
+      {{ form.color(class="input", type="color") }}
+    </div>
+    <div class="form-group checkbox">
+      {{ form.blink() }} {{ form.blink.label }}
+    </div>
+    <div class="form-group checkbox">
+      {{ form.enabled() }} {{ form.enabled.label }}
+    </div>
+    <div class="form-group checkbox">
+      {{ form.scroll() }} {{ form.scroll.label }}
+    </div>
+    {{ form.submit(class="btn-primary") }}
+  </form>
+{% endblock %}
