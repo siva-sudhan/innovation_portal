@@ -41,6 +41,7 @@ class EventForm(FlaskForm):
 class DisplayMessageForm(FlaskForm):
     text = StringField('Message Text', validators=[DataRequired(), Length(max=500)])
     color = StringField('Text Color', validators=[Optional(), Length(max=20)], default='#FF0000')
+    link = StringField('Link', validators=[Optional(), Length(max=500)])
     blink = BooleanField('Blink Animation')
     enabled = BooleanField('Enable Message', default=True)
     scroll = BooleanField('Scrolling Animation', default=True)

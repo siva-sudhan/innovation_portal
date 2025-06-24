@@ -160,6 +160,7 @@ def manage_message():
             message = DisplayMessage()
         message.text = form.text.data
         message.color = form.color.data or '#FF0000'
+        message.link = form.link.data or None
         message.blink = form.blink.data
         message.enabled = form.enabled.data
         message.scroll = form.scroll.data
@@ -171,6 +172,7 @@ def manage_message():
     if message:
         form.text.data = message.text
         form.color.data = message.color
+        form.link.data = message.link
         form.blink.data = message.blink
         form.enabled.data = message.enabled
         form.scroll.data = message.scroll
