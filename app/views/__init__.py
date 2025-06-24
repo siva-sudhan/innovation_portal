@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 from app.forms import IdeaForm, VoteForm, LoginForm, EventForm
-from app.models import db, Idea, Vote, Event
+from app.models import db, Idea, Vote, Event, DisplayMessage
 from app.utils import (
     generate_tags,
     export_ideas_to_excel,
@@ -34,6 +34,7 @@ def submit_idea():
         return redirect(url_for('auth.login'))
 
     form = IdeaForm()
+    display_message = DisplayMessage.query.first()
     if form.validate_on_submit():
         title = form.title.data
         description = form.description.data
@@ -67,7 +68,7 @@ def submit_idea():
             patent_url=patent_url
         )
 
-    return render_template('submit.html', form=form)
+    return render_template('submit.html', form=form, display_message=display_message)
 
 @views_bp.route('/dashboard')
 def dashboard():
