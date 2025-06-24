@@ -3,6 +3,11 @@
 {% block title %}Submit Idea{% endblock %}
 
 {% block content %}
+  {% if display_message %}
+    <div class="scrolling-message{% if display_message.blink %} blink{% endif %}" style="color: {{ display_message.color }};">
+      <span>{{ display_message.text }}</span>
+    </div>
+  {% endif %}
   <div class="idea-form-wrapper animate-fade-in">
     <h2 class="form-title">📝 Submit a New Idea</h2>
 

@@ -1,9 +1,9 @@
 # File: app/views/admin.py
 
 from flask import Blueprint, render_template, session, redirect, url_for, flash, request, send_file
-from app.models import db, Idea, Event, Vote
+from app.models import db, Idea, Event, Vote, DisplayMessage
 from app.auth import is_admin
-from app.forms import EventForm
+from app.forms import EventForm, DisplayMessageForm
 import random
 import os, json
 from datetime import datetime
@@ -149,6 +149,29 @@ def new_event():
         return redirect(url_for('admin.new_event'))
     events = Event.query.order_by(Event.start_date.desc()).all()
     return render_template('admin/new_event.html', form=form, events=events)
+
+
+@admin_bp.route('/message', methods=['GET', 'POST'])
+def manage_message():
+    form = DisplayMessageForm()
+    message = DisplayMessage.query.first()
+    if form.validate_on_submit():
+        if not message:
+            message = DisplayMessage()
+        message.text = form.text.data
+        message.color = form.color.data or '#FF0000'
+        message.blink = form.blink.data
+        db.session.add(message)
+        db.session.commit()
+        flash('Display message updated.', 'success')
+        return redirect(url_for('admin.manage_message'))
+
+    if message:
+        form.text.data = message.text
+        form.color.data = message.color
+        form.blink.data = message.blink
+
+    return render_template('admin/manage_message.html', form=form)
 
 @admin_bp.route('/events/<int:event_id>/delete')
 def delete_event(event_id):

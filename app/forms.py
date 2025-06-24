@@ -36,3 +36,10 @@ class EventForm(FlaskForm):
     start_date = DateField('Start Date', validators=[DataRequired()], format='%Y-%m-%d')
     end_date = DateField('End Date', validators=[DataRequired()], format='%Y-%m-%d')
     submit = SubmitField('Add Event')
+
+
+class DisplayMessageForm(FlaskForm):
+    text = StringField('Message Text', validators=[DataRequired(), Length(max=500)])
+    color = StringField('Text Color', validators=[Optional(), Length(max=20)], default='#FF0000')
+    blink = BooleanField('Blink Animation')
+    submit = SubmitField('Save Message')
