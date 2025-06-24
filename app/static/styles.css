@@ -753,6 +753,7 @@ a.btn:hover,
   font-weight: bold;
   margin-bottom: 10px;
 }
+
 .scrolling-message {
   overflow: hidden;
   white-space: nowrap;
@@ -764,6 +765,7 @@ a.btn:hover,
   padding-left: 100%;
   animation: marquee 15s linear infinite;
 }
+
 .scrolling-message span::after {
   content: attr(data-text) '\2003';
 }

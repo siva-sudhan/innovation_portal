@@ -211,8 +211,29 @@ def events():
             'start_date': ev.start_date.isoformat(),
             'end_date': ev.end_date.isoformat(),
             'color': ev.color,
+            'display_start': ev.start_date.strftime('%d %b %Y').upper(),
+            'display_end': ev.end_date.strftime('%d %b %Y').upper(),
         }
         for ev in events_query
+    ]
+
+    upcoming_query = (
+        Event.query
+        .filter(Event.start_date > end_month)
+        .order_by(Event.start_date)
+        .all()
+    )
+    upcoming_events = [
+        {
+            'id': ev.id,
+            'title': ev.title,
+            'start_date': ev.start_date.isoformat(),
+            'end_date': ev.end_date.isoformat(),
+            'color': ev.color,
+            'display_start': ev.start_date.strftime('%d %b %Y').upper(),
+            'display_end': ev.end_date.strftime('%d %b %Y').upper(),
+        }
+        for ev in upcoming_query
     ]
 
     month_name = datetime(year, month, 1).strftime('%b %Y').upper()
@@ -223,4 +244,5 @@ def events():
         year=year,
         month_name=month_name,
         events=events,
+        upcoming_events=upcoming_events,
     )
