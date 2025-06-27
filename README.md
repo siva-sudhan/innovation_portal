@@ -33,3 +33,12 @@ Verify Python files compile without syntax errors:
 ```bash
 python -m py_compile $(git ls-files '*.py')
 ```
+
+## Admin Data Export/Import
+
+Administrators can export and import idea data in two formats from the dashboard:
+
+1. **Raw DB (JSON)** – exports only the ideas in JSON form. Existing `Export Raw DB` and `Import Raw DB` actions handle this format.
+2. **Full Database** – downloads or uploads the entire SQLite database including user accounts, votes, and calendar events.
+
+Use these features to migrate or back up all application data.
