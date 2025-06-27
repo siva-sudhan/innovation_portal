@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Import Database – Admin{% endblock %}
+
+{% block content %}
+  <h2 class="page-heading">📥 Import Full Database</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="import-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-group">
+      <label for="file">Choose SQLite database file:</label>
+      <input type="file" name="file" accept=".db" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Import</button>
+  </form>
+{% endblock %}

@@ -4,8 +4,9 @@ from flask import Blueprint, render_template, session, redirect, url_for, flash,
 from app.models import db, Idea, Event, Vote, DisplayMessage
 from app.auth import is_admin
 from app.forms import EventForm, DisplayMessageForm
+from app.backup import DB_PATH
 import random
-import os, json
+import os, json, shutil
 from datetime import datetime
 from collections import defaultdict
 from io import BytesIO
@@ -120,6 +121,13 @@ def export_all_data():
     output.seek(0)
 
     return send_file(output, as_attachment=True, download_name='raw_idea_data.json')
+
+
+@admin_bp.route('/export-db')
+def export_database():
+    """Download the raw SQLite database file."""
+    db.session.commit()  # ensure latest data written
+    return send_file(DB_PATH, as_attachment=True, download_name='innovation.db')
 
 
 @admin_bp.route('/refresh-votes', methods=['POST'])
@@ -238,4 +246,39 @@ def import_raw_data():
         return redirect(url_for('admin.admin_dashboard'))
 
     return render_template('admin/import_data.html')
+
+
+@admin_bp.route('/import-db', methods=['GET', 'POST'])
+def import_database():
+    """Replace the current SQLite database with an uploaded file."""
+    from flask_wtf.csrf import validate_csrf
+    from wtforms import ValidationError
+
+    if request.method == 'POST':
+        file = request.files.get('file')
+        csrf_token = request.form.get('csrf_token')
+
+        try:
+            validate_csrf(csrf_token)
+        except ValidationError:
+            flash('Invalid CSRF token.', 'error')
+            return redirect(request.url)
+
+        if not file or not file.filename.endswith('.db'):
+            flash('Please upload a SQLite database file.', 'error')
+            return redirect(request.url)
+
+        try:
+            backup_path = DB_PATH + '.bak'
+            if os.path.exists(DB_PATH):
+                shutil.copy2(DB_PATH, backup_path)
+            file.save(DB_PATH)
+            db.engine.dispose()
+            flash('Database imported successfully.', 'success')
+        except Exception as e:
+            flash(f'Database import failed: {str(e)}', 'error')
+
+        return redirect(url_for('admin.admin_dashboard'))
+
+    return render_template('admin/import_db.html')
 

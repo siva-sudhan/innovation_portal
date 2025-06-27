@@ -40,8 +40,10 @@
     </table>
 
     <div class="admin-actions">
-        <a href="{{ url_for('admin.export_all_data') }}" class="btn btn-secondary">📤 Export Raw DB</a>
-        <a href="{{ url_for('admin.import_raw_data') }}" class="btn btn-secondary">📥 Import Raw DB</a>
+        <a href="{{ url_for('admin.export_all_data') }}" class="btn btn-secondary">📤 Export Raw DB (JSON)</a>
+        <a href="{{ url_for('admin.import_raw_data') }}" class="btn btn-secondary">📥 Import Raw DB (JSON)</a>
+        <a href="{{ url_for('admin.export_database') }}" class="btn btn-secondary">📤 Export Full DB</a>
+        <a href="{{ url_for('admin.import_database') }}" class="btn btn-secondary">📥 Import Full DB</a>
         <a href="{{ url_for('admin.new_event') }}" class="btn btn-secondary">📅 Add Event</a>
         <a href="{{ url_for('admin.manage_message') }}" class="btn btn-secondary">📢 Display Message</a>
     </div>
