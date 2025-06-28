@@ -5,12 +5,12 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 
 # Paths
-# Use the same location as SQLALCHEMY_DATABASE_URI which points to
-# a SQLite file relative to the application package directory.
-# This ensures the backup job looks for the correct database file.
-BASE_DIR = os.path.dirname(__file__)
-DB_PATH = os.path.join(BASE_DIR, 'innovation.db')
-BACKUP_DIR = os.path.join(os.path.abspath(os.path.join(BASE_DIR, '..')), 'db_backups')
+# Use the same location as SQLALCHEMY_DATABASE_URI which points to the
+# database file stored inside the instance folder.  Using the instance
+# directory keeps the database separate from the application code.
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+DB_PATH = os.path.join(BASE_DIR, 'instance', 'innovation.db')
+BACKUP_DIR = os.path.join(BASE_DIR, 'db_backups')
 
 scheduler = BackgroundScheduler()
 
