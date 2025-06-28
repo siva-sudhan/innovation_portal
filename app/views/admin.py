@@ -127,7 +127,8 @@ def export_all_data():
 def export_database():
     """Download the raw SQLite database file."""
     db.session.commit()  # ensure latest data written
-    return send_file(DB_PATH, as_attachment=True, download_name='innovation.db')
+    db_file = DB_PATH  # database located in instance folder
+    return send_file(db_file, as_attachment=True, download_name='innovation.db')
 
 
 @admin_bp.route('/refresh-votes', methods=['POST'])
@@ -270,9 +271,10 @@ def import_database():
 
         try:
             backup_path = DB_PATH + '.bak'
-            if os.path.exists(DB_PATH):
-                shutil.copy2(DB_PATH, backup_path)
-            file.save(DB_PATH)
+            db_file = DB_PATH  # database located in instance folder
+            if os.path.exists(db_file):
+                shutil.copy2(db_file, backup_path)
+            file.save(db_file)
             db.engine.dispose()
             flash('Database imported successfully.', 'success')
         except Exception as e:
