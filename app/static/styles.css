@@ -323,6 +323,12 @@ body {
   color: #FFCD00;
 }
 
+.team-members {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
 @keyframes fadeSlideIn {
   from {
     opacity: 0;
