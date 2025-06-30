@@ -20,9 +20,14 @@ views_bp = Blueprint('views', __name__)
 def settings():
     form = LoginForm()
     if form.validate_on_submit():
-        user = form.username.data.strip()
-        session['username'] = user
-        session['role'] = 'admin' if is_admin(user) else 'user'
+        new_user = form.username.data.strip()
+        old_user = session.get('username')
+        if old_user and new_user != old_user:
+            # Update submitter name on existing ideas
+            Idea.query.filter_by(submitter=old_user).update({"submitter": new_user})
+            db.session.commit()
+        session['username'] = new_user
+        session['role'] = 'admin' if is_admin(new_user) else 'user'
         flash('Username updated.', 'success')
         return redirect(url_for('views.settings'))
     return render_template('settings.html', form=form)
