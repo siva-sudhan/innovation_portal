@@ -11,6 +11,16 @@
   <p><strong>Tags:</strong> {{ idea.tags }}</p>
   <p><strong>Submitted:</strong> {{ idea.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
   <p><strong>Submitted By:</strong> {{ 'Anonymous' if idea.is_anonymous else idea.submitter }}</p>
+  {% if idea.teammates %}
+    <div class="section">
+      <h3>👥 Team Members</h3>
+      <ul class="team-members">
+        {% for member in idea.teammates.split(',') %}
+          <li>{{ member.strip() }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
   <p><strong>Role Preference:</strong> {{ idea.intent }}</p>
   <p><strong>Votes:</strong> {{ idea.votes }}</p>
 
