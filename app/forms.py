@@ -7,7 +7,7 @@ from wtforms import (
     SelectField,
     DateField,
 )
-from wtforms.validators import DataRequired, Length, Optional
+from wtforms.validators import DataRequired, Length, Optional, Regexp
 
 class IdeaForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=5, max=150)])
@@ -27,7 +27,19 @@ class VoteForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=1, max=150)])
+    username = StringField(
+        'Username',
+        validators=[
+            DataRequired(),
+            Length(min=1, max=150),
+            Regexp(
+                r'^[a-z0-9._@]+$',
+                message=(
+                    'Please use your mail id in small case so that we can link your account to teams.'
+                ),
+            ),
+        ],
+    )
     submit = SubmitField('Continue')
 
 
