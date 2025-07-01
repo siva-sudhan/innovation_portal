@@ -25,4 +25,14 @@
       </div>
     </form>
   </div>
+  <script>
+    document.querySelector('.settings-form').addEventListener('submit', function(e) {
+      const value = document.querySelector('input[name="username"]').value;
+      const regex = /^[a-z0-9._@]+$/;
+      if (!regex.test(value)) {
+        e.preventDefault();
+        alert('Please use your mail id in small case so that we can link your account to teams.');
+      }
+    });
+  </script>
 {% endblock %}
