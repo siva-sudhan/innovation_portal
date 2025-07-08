@@ -14,6 +14,8 @@ class Idea(db.Model):
     is_anonymous = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     votes = db.Column(db.Integer, default=0)
+    group_id = db.Column(db.Integer, db.ForeignKey('idea.id'))
+    children = db.relationship('Idea', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')
 
     def __repr__(self):
         return f'<Idea {self.id} - {self.title}>'

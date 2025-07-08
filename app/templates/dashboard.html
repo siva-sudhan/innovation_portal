@@ -26,10 +26,12 @@
     </div>
   </div>
 
-  {% if ideas %}
+  {% if idea_stacks %}
     <div class="idea-grid">
-      {% for idea in ideas %}
-        <div class="idea-card animate-fade-in">
+      {% for stack in idea_stacks %}
+        <div class="idea-stack">
+        {% for idea in stack %}
+          <div class="idea-card stack-card animate-fade-in" data-id="{{ idea.id }}" {% if session.role == 'admin' %}draggable="true"{% endif %} style="--stack-index:{{ loop.index0 }}">
           <h3>{{ idea.title }}</h3>
           <p class="tags">
             {% for tag in idea.tags.split(',') %}
@@ -63,6 +65,8 @@
               <a href="{{ url_for('views.delete_idea', idea_id=idea.id) }}" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
             </div>
           {% endif %}
+          </div>
+        {% endfor %}
         </div>
       {% endfor %}
     </div>
@@ -70,6 +74,7 @@
     <form method="GET" action="{{ url_for('views.export_ideas') }}" class="export-form">
       <button type="submit" class="export-btn">📤 Export All Ideas to Excel</button>
     </form>
+    <div id="uncombineZone" class="uncombine-zone">Drop here to uncombine</div>
   {% else %}
     <p>No ideas submitted yet.</p>
   {% endif %}
@@ -158,6 +163,42 @@
 
     function escapeReg(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    document.querySelectorAll('.idea-card[draggable="true"]').forEach(card => {
+      card.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', card.dataset.id);
+      });
+    });
+    document.querySelectorAll('.idea-card').forEach(card => {
+      card.addEventListener('dragover', e => e.preventDefault());
+      card.addEventListener('drop', e => {
+        e.preventDefault();
+        const source = e.dataTransfer.getData('text/plain');
+        const target = card.dataset.id;
+        if (source && target && source !== target) {
+          fetch('/api/combine', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({source_id: source, target_id: target})
+          }).then(() => location.reload());
+        }
+      });
+    });
+    const uncombineZone = document.getElementById('uncombineZone');
+    if (uncombineZone) {
+      uncombineZone.addEventListener('dragover', e => e.preventDefault());
+      uncombineZone.addEventListener('drop', e => {
+        e.preventDefault();
+        const id = e.dataTransfer.getData('text/plain');
+        if (id) {
+          fetch('/api/uncombine', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({idea_id: id})
+          }).then(() => location.reload());
+        }
+      });
     }
   </script>
 {% endblock %}
