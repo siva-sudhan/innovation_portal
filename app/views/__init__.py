@@ -78,10 +78,16 @@ def submit_idea():
 @views_bp.route('/dashboard')
 def dashboard():
     filter_my = request.args.get('mine') == '1'
-    query = Idea.query.order_by(Idea.timestamp.desc())
+    query = Idea.query.filter_by(group_id=None).order_by(Idea.timestamp.desc())
     if filter_my and session.get('username'):
         query = query.filter_by(submitter=session['username'])
     ideas = query.all()
+    idea_stacks = []
+    for root_idea in ideas:
+        children = root_idea.children.order_by(Idea.votes.desc()).all()
+        stack = [root_idea] + children
+        stack.sort(key=lambda i: i.votes, reverse=True)
+        idea_stacks.append(stack)
     unique_user_count = db.session.query(Idea.submitter).filter(Idea.submitter.isnot(None)).distinct().count()
 
     voter_id = get_voter_id()
@@ -92,6 +98,7 @@ def dashboard():
     return render_template(
         'dashboard.html',
         ideas=ideas,
+        idea_stacks=idea_stacks,
         unique_user_count=unique_user_count,
         voted_ideas=voted_ideas,
         vote_form=vote_form,
@@ -187,6 +194,36 @@ def vote(idea_id):
 
     flash('Thanks for voting!', 'success')
     return redirect(url_for('views.dashboard'))
+
+
+@views_bp.route('/api/combine', methods=['POST'])
+def api_combine():
+    if session.get('role') != 'admin':
+        return {'error': 'Forbidden'}, 403
+    data = request.get_json() or {}
+    source_id = data.get('source_id')
+    target_id = data.get('target_id')
+    if not source_id or not target_id or source_id == target_id:
+        return {'error': 'Invalid data'}, 400
+    source = Idea.query.get_or_404(int(source_id))
+    target = Idea.query.get_or_404(int(target_id))
+    source.group_id = target.id if target.group_id is None else target.group_id
+    db.session.commit()
+    return {'status': 'ok'}
+
+
+@views_bp.route('/api/uncombine', methods=['POST'])
+def api_uncombine():
+    if session.get('role') != 'admin':
+        return {'error': 'Forbidden'}, 403
+    data = request.get_json() or {}
+    idea_id = data.get('idea_id')
+    if not idea_id:
+        return {'error': 'Invalid data'}, 400
+    idea = Idea.query.get_or_404(int(idea_id))
+    idea.group_id = None
+    db.session.commit()
+    return {'status': 'ok'}
 
 @views_bp.route('/export')
 def export_ideas():
