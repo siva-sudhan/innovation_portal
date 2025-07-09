@@ -221,31 +221,6 @@ body {
   transform: translateY(-3px);
 }
 
-.idea-stack {
-  position: relative;
-}
-
-.stack-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  transition: transform 0.3s ease;
-  z-index: calc(100 - var(--stack-index));
-}
-
-.idea-stack:hover .stack-card {
-  transform: translateX(calc(var(--stack-index) * 20px));
-}
-
-.uncombine-zone {
-  margin-top: 20px;
-  padding: 20px;
-  text-align: center;
-  border: 2px dashed #ccc;
-  color: #666;
-}
-
 .tags {
   margin: 8px 0;
 }
