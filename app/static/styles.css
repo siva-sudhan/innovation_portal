@@ -799,3 +799,55 @@ a.btn:hover,
 @keyframes blink {
   50% { opacity: 0; }
 }
+
+/* Idea grouping stacks */
+.group-section {
+  margin-top: 40px;
+}
+
+.groups {
+  list-style: none;
+  padding: 0;
+}
+
+.idea-group {
+  margin-bottom: 30px;
+}
+
+.idea-stack {
+  list-style: none;
+  position: relative;
+  height: 160px;
+  padding: 20px 0;
+  cursor: pointer;
+}
+
+.idea-stack .idea-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 15px;
+  width: 250px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.4s cubic-bezier(.63,.15,.03,1.12);
+}
+
+.idea-stack .idea-card:nth-child(1) { z-index: 5; transform: rotate(-2deg); }
+.idea-stack .idea-card:nth-child(2) { z-index: 4; transform: rotate(-7deg); }
+.idea-stack .idea-card:nth-child(3) { z-index: 3; transform: rotate(5deg); }
+.idea-stack .idea-card:nth-child(4) { z-index: 2; transform: rotate(-12deg); }
+.idea-stack .idea-card:nth-child(5) { z-index: 1; transform: rotate(8deg); }
+
+.idea-stack.open .idea-card { transform: none; }
+
+.idea-stack .small-desc {
+  font-size: 0.85em;
+  margin: 4px 0;
+}
+
+.idea-stack .meta {
+  font-size: 0.75em;
+  color: #555;
+}
