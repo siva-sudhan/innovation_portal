@@ -89,6 +89,13 @@ def dashboard():
     voted_ideas = {v.idea_id for v in voted}
     vote_form = VoteForm()
 
+    groups = None
+    if session.get('role') == 'admin':
+        groups = {}
+        for idea in ideas:
+            tag = idea.tags.split(',')[0].strip() if idea.tags else 'Untagged'
+            groups.setdefault(tag, []).append(idea)
+
     return render_template(
         'dashboard.html',
         ideas=ideas,
@@ -96,6 +103,7 @@ def dashboard():
         voted_ideas=voted_ideas,
         vote_form=vote_form,
         filter_my=filter_my,
+        groups=groups,
     )
 
 @views_bp.route('/idea/<int:idea_id>')

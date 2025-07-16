@@ -70,6 +70,28 @@
     <form method="GET" action="{{ url_for('views.export_ideas') }}" class="export-form">
       <button type="submit" class="export-btn">📤 Export All Ideas to Excel</button>
     </form>
+
+    {% if session.role == 'admin' and groups %}
+      <div class="group-section">
+        <h3 class="group-title">📂 Idea Groups</h3>
+        <ul class="groups">
+          {% for tag, items in groups.items() %}
+            <li class="idea-group">
+              <h4>{{ tag }}</h4>
+              <ul class="idea-stack">
+                {% for item in items %}
+                  <li class="idea-card" style="--i: {{ loop.index0 }};">
+                    <h5>{{ item.title }}</h5>
+                    <p class="small-desc">{{ item.description[:80] }}{% if item.description|length > 80 %}...{% endif %}</p>
+                    <p class="meta">By {{ 'Anonymous' if item.is_anonymous else item.submitter }}</p>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
   {% else %}
     <p>No ideas submitted yet.</p>
   {% endif %}
@@ -159,5 +181,19 @@
     function escapeReg(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
+
+    document.querySelectorAll('.idea-stack').forEach(stack => {
+      stack.addEventListener('click', () => {
+        const open = stack.classList.toggle('open');
+        const cards = stack.querySelectorAll('.idea-card');
+        cards.forEach((card, idx) => {
+          if (open) {
+            card.style.transform = `translateX(${idx * 260}px)`;
+          } else {
+            card.style.transform = '';
+          }
+        });
+      });
+    });
   </script>
 {% endblock %}
